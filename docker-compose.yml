@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  ravendb:
+    image: ravendb/ravendb:latest
+    container_name: ravendb
+    ports:
+      - "8082:8080"   # RavenDB Studio (UI)

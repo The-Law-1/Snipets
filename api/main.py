@@ -6,10 +6,13 @@ from controllers.snippet_controller import create_snippet, get_snippets, delete_
 
 app = FastAPI()
 
-# Allow requests from frontend (localhost:3000)
+
+import os
+# Allow requests from frontend, read from env FRONTEND_URL
+frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[frontend_url],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]

@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"build": "esbuild src/background.ts --bundle --platform=browser --outfile=dist/background.js && esbuild src/options.ts --bundle --platform=browser --outfile=dist/options.js",
+		"build": "for file in src/*.ts; do esbuild \"$file\" --bundle --platform=browser --outfile=dist/$(basename \"$file\" .ts).js; done",
 		"clean": "rimraf dist",
 		"prettier": "prettier --write ."
 	},

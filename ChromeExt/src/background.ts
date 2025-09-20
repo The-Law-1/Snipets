@@ -86,17 +86,10 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 
 // Simple user feedback via notification
 async function notify(title: string, message?: string) {
-	// MV3: notifications permission not strictly required for basic usage
-	// because chrome.notifications API requires explicit permission. Here we
-	// fallback to the service worker console if notifications are unavailable.
-	if (!chrome.notifications) {
-		console.log(`[notify] ${title} - ${message ?? ""}`);
-		return;
-	}
-	chrome.notifications.create({
-		type: "basic",
-		title,
-    iconUrl: "https://picsum.photos/200",
-		message: message ?? ""
-	});
+  // Get the active tab
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0]?.id) {
+      chrome.tabs.sendMessage(tabs[0].id, { type: "SHOW_ALERT", message: `${title}\n${message || ""}` });
+    }
+  });
 }

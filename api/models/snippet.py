@@ -6,3 +6,4 @@ class Snippet:
         self.text = text
         self.title = title
         self.url = url
+        self.created_at = None  # This will be set by the database upon creation

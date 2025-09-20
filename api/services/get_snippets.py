@@ -6,7 +6,7 @@ class GetSnippets:
     def get_by_title(self, title: str) -> List[Snippet]:
         try:
             with store.open_session() as session:
-                snippets = list(session.query_collection("Snippets").where_equals("title", title))
+                snippets = list(session.query_collection("Snippets").search("title", f"*{title}*"))
                 return snippets
         except Exception as e:
             print(f"Error retrieving snippets by title: {e}")

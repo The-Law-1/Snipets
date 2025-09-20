@@ -5,3 +5,4 @@ class SerializedSnippet(BaseModel):
     text: str
     title: str
     url: str
+    created_at: str | None = None

@@ -44,7 +44,9 @@ async function sendSelectedText(text: string, pageUrl?: string, pageTitle?: stri
   };
   if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
 
-  return fetch(endpoint, {
+  const path = `${endpoint}/snippets`
+
+  return fetch(path, {
     method: "POST",
     headers,
     body,
@@ -94,6 +96,7 @@ async function notify(title: string, message?: string) {
 	chrome.notifications.create({
 		type: "basic",
 		title,
+    iconUrl: "https://picsum.photos/200",
 		message: message ?? ""
 	});
 }

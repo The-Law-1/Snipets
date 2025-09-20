@@ -1,10 +1,10 @@
 {
 	"manifest_version": 3,
-	"name": "Context Menu → Send Selection (TS)",
+	"name": "Snipets",
 	"version": "1.0.0",
 	"description": "Adds a context menu for selected text and POSTs it to your API.",
 	"permissions": ["contextMenus", "storage"],
-	"host_permissions": ["https://api.example.com/*"],
+	"host_permissions": ["http://localhost:8000/*"],
 	"background": {
 		"service_worker": "dist/background.js"
 	},

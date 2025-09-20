@@ -8,8 +8,8 @@ const BASE_URL = `${API_URL}:${API_PORT}`;
 export interface Snippet {
 	id: number;
 	title: string;
-	content: string;
-	language: string;
+	text: string;
+  url: string;
 	created_at?: string;
 }
 
@@ -25,7 +25,12 @@ export const useSnippetsStore = defineStore('snippets', {
 			this.error = null;
 			try {
 				const res = await fetch(`${BASE_URL}/snippets?title=${titleSearch}`);
-				this.snippets = await res.json();
+        const json = await res.json();
+        if (!res.ok) {
+          this.error = json.message || 'Failed to fetch snippets';
+          return;
+        }
+				this.snippets = json.data;
 			} catch (err: any) {
 				this.error = err.message || 'Failed to fetch snippets';
 			} finally {
@@ -43,7 +48,12 @@ export const useSnippetsStore = defineStore('snippets', {
 					},
 					body: JSON.stringify(snippet),
 				});
-				this.snippets.push(await res.json());
+        const json = await res.json();
+        if (!res.ok) {
+          this.error = json.message || 'Failed to create snippet';
+          return;
+        }
+				this.snippets.push(json.data);
 			} catch (err: any) {
 				this.error = err.message || 'Failed to create snippet';
 			} finally {

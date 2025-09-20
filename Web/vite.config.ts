@@ -15,7 +15,7 @@ export default () => {
         // },
       },
       server: {
-        port: 3000,
+        port: 3000, 
         // host: process.env.VITE_BACKEND_HOST || "localhost:8080",
         // proxy: {
         //   "^/api": {

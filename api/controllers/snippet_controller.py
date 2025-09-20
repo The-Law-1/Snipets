@@ -34,8 +34,6 @@ async def get_snippets(    title: str = Query(None, description="Filter snippets
         else:
             result = getSnippets.get_all()
 
-        for snippet in result:
-            print("Snippet results: ", snippet.created_at)
         serialized_snippets = [SerializedSnippet(**snippet.__dict__) for snippet in result]
         return {"success": True, "data": serialized_snippets}
     except Exception as e:

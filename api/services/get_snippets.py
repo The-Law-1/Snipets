@@ -15,7 +15,7 @@ class GetSnippets:
     def get_all(self) -> List[Snippet]:
         try:
             with store.open_session() as session:
-                snippets = list(session.query_collection("Snippets").order_by_descending("created_at"))
+                snippets = list(session.query_collection("Snippets").order_by_descending("created_at").take(50))
                 return snippets
         except Exception as e:
             print(f"Error retrieving snippets: {e}")

@@ -93,7 +93,6 @@ async function notify(title: string, message?: string) {
 	}
 	chrome.notifications.create({
 		type: "basic",
-		iconUrl: "icon-128.png", // Optional: add an icon file or remove this line
 		title,
 		message: message ?? ""
 	});

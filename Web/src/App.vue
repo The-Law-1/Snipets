@@ -6,7 +6,7 @@
       <div v-if="error" class="text-center py-8 text-red-500">{{ error }}</div>
       <div v-if="snippets.length === 0 && !loading" class="text-center py-8 text-gray-400">No snippets found.</div>
       <div v-if="snippets.length > 0" class="grid gap-6 mt-6">
-        <SnippetCard v-for="snippet in snippets" :key="snippet.id" :snippet="snippet" />
+        <SnippetCard v-for="snippet in snippets" :key="snippet.id" :snippet="snippet" @delete="onDelete" />
       </div>
     </div>
   </div>
@@ -25,6 +25,10 @@ const error = computed(() => store.error);
 
 const onSearch = async (query: string) => {
   await store.getSnippets(query);
+};
+
+const onDelete = async (id: number) => {
+  await store.deleteSnippet(id);
 };
 
 onMounted(() => {

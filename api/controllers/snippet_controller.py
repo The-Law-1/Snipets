@@ -44,6 +44,6 @@ async def delete_snippet(snippet_id: str,
                           deleteSnippet: DeleteSnippet = Depends(get_delete_snippet_service)) -> Any:
     try:
         result = deleteSnippet.delete(snippet_id)
-        return {"success": True, "data": result}
+        return {"success": True, "deleted": result}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

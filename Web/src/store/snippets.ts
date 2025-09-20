@@ -6,7 +6,7 @@ const API_PORT = import.meta.env.VITE_API_PORT || process.env.API_PORT;
 const BASE_URL = `${API_URL}:${API_PORT}`;
 
 export interface Snippet {
-	id: number;
+	Id: string;
 	title: string;
 	text: string;
   url: string;
@@ -60,14 +60,18 @@ export const useSnippetsStore = defineStore('snippets', {
 				this.loading = false;
 			}
 		},
-		async deleteSnippet(id: number) {
+		async deleteSnippet(id: string) {
 			this.loading = true;
 			this.error = null;
 			try {
-				await fetch(`${BASE_URL}/snippets/${id}`, {
+
+        // urlencode id
+        const encodedId = encodeURIComponent(id);
+
+				await fetch(`${BASE_URL}/snippets/${encodedId}`, {
 					method: "DELETE",
 				});
-				this.snippets = this.snippets.filter(s => s.id !== id);
+				this.snippets = this.snippets.filter(s => s.Id !== id);
 			} catch (err: any) {
 				this.error = err.message || 'Failed to delete snippet';
 			} finally {

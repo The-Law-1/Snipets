@@ -28,4 +28,4 @@ app.post("/snippets/")(create_snippet)
 
 app.get("/snippets/")(get_snippets)
 
-app.delete("/snippets/{snippet_id}")(delete_snippet)
+app.delete("/snippets/{snippet_id:path}")(delete_snippet)

@@ -4,7 +4,7 @@
 	"version": "1.0.0",
 	"description": "Adds a context menu for selected text and POSTs it to your API.",
 	"permissions": ["contextMenus", "storage"],
-	"host_permissions": ["http://localhost:8000/*"],
+	"host_permissions": ["http://localhost:8000/*", "http://localhost:8001/*"],
 	"background": {
 		"service_worker": "dist/background.js"
 	},

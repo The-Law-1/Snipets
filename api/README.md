@@ -20,4 +20,8 @@ docker-compose up ravendb
 uvicorn main:app --reload
 ```
 
-The API will be available at [http://localhost:8000](http://localhost:8000).
+The API will be available at [http://localhost:XXXX](http://localhost:8000).
+
+
+# Swagger
+Can be accessed at [http://localhost:XXXX /docs](http://localhost:8000/docs)

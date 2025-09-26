@@ -4,8 +4,8 @@
     <div class="flex items-center justify-between mb-2">
       <h2 class="text-xl font-bold text-gray-900">{{ snippet.title }}</h2>
       <div class="flex items-center gap-2">
-        <a v-if="snippet.url" :href="snippet.url" target="_blank" class="text-blue-600 hover:underline text-sm">Source</a>
-        <button @click="onDelete" class="ml-2 px-2 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200">Delete</button>
+        <a v-if="snippet.url" :href="snippet.url" target="_blank" class="text-blue-600 cursor-pointer hover:underline text-sm">Source</a>
+        <button @click="onDelete" class="ml-2 cursor-pointer px-2 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200">Delete</button>
       </div>
     </div>
     <blockquote class="border-l-4 border-blue-400 pl-4 italic text-gray-800 text-lg">

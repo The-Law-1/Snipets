@@ -5,11 +5,12 @@ from db import store
 
 from datetime import datetime
 
+
 class SaveSnippet:
     # * should take a "createSnippet" domain object, call a repo, and return a "Snippet" domain object
-    def save(self, snippet: CreateSnippet) -> Snippet:        
+    def save(self, snippet: CreateSnippet) -> Snippet:
         try:
-            with store.open_session() as session:             
+            with store.open_session() as session:
                 snippet_model = Snippet(**snippet.dict())
                 snippet_model.created_at = datetime.now()  # Set the creation timestamp
                 session.store(snippet_model)

@@ -2,3 +2,4 @@ fastapi
 ravendb
 pydantic
 uvicorn
+black

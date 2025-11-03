@@ -1,5 +1,5 @@
 from domain.snippet import CreateSnippet
-from fastapi import APIRouter, HTTPException, Depends, Query
+from fastapi import HTTPException, Depends, Query
 from services.save_snippet import SaveSnippet
 from services.get_snippets import GetSnippets
 from services.delete_snippet import DeleteSnippet

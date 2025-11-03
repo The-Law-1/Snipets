@@ -1,3 +1,4 @@
+from controllers.articles_controller import get_articles
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from db import init_store
@@ -29,5 +30,7 @@ def read_root():
 app.post("/snippets/")(create_snippet)
 
 app.get("/snippets/")(get_snippets)
+
+app.get("/articles/")(get_articles)
 
 app.delete("/snippets/{snippet_id:path}")(delete_snippet)

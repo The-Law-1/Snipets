@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import Snippets from './pages/snippets.vue'
+import Articles from './pages/Articles.vue'
 
 const routes = {
   '/': Snippets,
+  "/articles": Articles,
   // articles
   // 404
 }

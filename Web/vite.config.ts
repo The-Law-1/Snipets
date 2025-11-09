@@ -1,5 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue'
+import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 
 export default () => {
@@ -10,6 +11,14 @@ export default () => {
     
       plugins: [vue(), tailwindcss()],
       resolve: {
+        alias: {
+          // "@": "/src",
+          // "@/components": "/src/components",
+          // "@/pages": "/src/pages",
+          // "@/store": "/src/store",
+          '@': fileURLToPath(new URL('./src', import.meta.url)) // Alias for src folder
+
+        },
         // alias: {
         //   "@": fileURLToPath(new URL("./src", import.meta.url)),
         // },

@@ -7,6 +7,9 @@ class GetSnippets:
     def get_by_title(self, title: str) -> List[Snippet]:
         try:
             with store.open_session() as session:
+                print(f"Searching for snippets with title containing: {title}")
+                # ! space is taken as an end of query
+                # todo: try escaping the spaces, or using the OR operator, cf ravendb docs
                 snippets = list(
                     session.query_collection("Snippets")
                     .search("title", f"*{title}*")

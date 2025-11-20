@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-50 p-6">
     <div class="max-w-2xl mx-auto">
-      <SnippetSearchBar @search="onSearch" />
+      <SearchBar @search="onSearch" />
 
       <NavbarButtons />
 
@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
 import { useSnippetsStore } from '@/store/snippets';
-import SnippetSearchBar from '@/components/SnippetSearchBar.vue';
+import SearchBar from '@/components/SearchBar.vue';
 import SnippetCard from '@/components/SnippetCard.vue';
 import NavbarButtons from '@/components/NavbarButtons.vue';
 
@@ -36,6 +36,7 @@ const onDelete = async (id: number) => {
 };
 
 onMounted(() => {
+  console.log("Current snippets on mount: ", snippets.value);
   store.getSnippets();
 });
 </script>

@@ -9,7 +9,6 @@ export interface Article {
   title: string;
   url: string;
   snippet_count: number;
-
 }
 
 export const useArticleStore = defineStore('articles', {

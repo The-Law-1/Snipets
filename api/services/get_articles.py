@@ -1,6 +1,7 @@
 from models.snippet import Snippet
 from db import store
-from typing import List, Tuple
+from typing import List
+from ravendb.documents.queries.misc import SearchOperator
 
 
 class Article:
@@ -18,10 +19,13 @@ class GetArticles:
     def get_by_title(self, title: str) -> List[Article]:
         try:
             with store.open_session() as session:
+                split_title = title.split(" ")
+                wildcard_query = "".join([f"*{word}* " for word in split_title]).strip()
+
                 results = list(
                     session.query(object_type=Snippet)
+                    .search("title", wildcard_query, operator=SearchOperator.AND)
                     .group_by("title", "url")
-                    .search("title", title)
                     .select_key("title", "title")
                     .select_key("url", "url")
                     .select_count()

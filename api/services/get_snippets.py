@@ -2,17 +2,18 @@ from models.snippet import Snippet
 from db import store
 from typing import List
 
+from ravendb.documents.queries.misc import SearchOperator
+
 
 class GetSnippets:
     def get_by_title(self, title: str) -> List[Snippet]:
         try:
             with store.open_session() as session:
-                print(f"Searching for snippets with title containing: {title}")
-                # ! space is taken as an end of query
-                # todo: try escaping the spaces, or using the OR operator, cf ravendb docs
+                split_title = title.split(" ")
+                wildcard_query = "".join([f"*{word}* " for word in split_title]).strip()
                 snippets = list(
                     session.query_collection("Snippets")
-                    .search("title", f"*{title}*")
+                    .search("title", wildcard_query, operator=SearchOperator.AND)
                     .order_by_descending("created_at")
                 )
                 return snippets

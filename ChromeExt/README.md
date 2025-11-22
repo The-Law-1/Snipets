@@ -7,6 +7,8 @@ npm i
 npm run build
 ```
 
+You *may* need to update the manifest.json with the correct port for your api server.
+
 ## Installation
 
 1. Open chrome, make sure you enable developer mode

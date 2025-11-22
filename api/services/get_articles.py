@@ -19,12 +19,9 @@ class GetArticles:
     def get_by_title(self, title: str) -> List[Article]:
         try:
             with store.open_session() as session:
-                split_title = title.split(" ")
-                wildcard_query = "".join([f"*{word}* " for word in split_title]).strip()
-
                 results = list(
                     session.query(object_type=Snippet)
-                    .search("title", wildcard_query, operator=SearchOperator.AND)
+                    .search("title", title, operator=SearchOperator.AND)
                     .group_by("title", "url")
                     .select_key("title", "title")
                     .select_key("url", "url")

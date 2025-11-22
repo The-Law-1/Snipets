@@ -20,11 +20,9 @@ export const useSnippetsStore = defineStore("snippets", {
 	}),
 	actions: {
 		async getSnippets(titleSearch: string = "") {
-			console.log("Fetching snippets with title search:", titleSearch);
 			this.loading = true;
 			this.error = null;
 			try {
-				console.log("Constructed URL:", `${BASE_URL}/snippets?title=${titleSearch}`);
 				const res = await fetch(`${BASE_URL}/snippets?title=${titleSearch}`);
 				const json = await res.json();
 				if (!res.ok) {

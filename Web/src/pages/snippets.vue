@@ -54,7 +54,8 @@ const onDelete = async (id: number) => {
 };
 
 onMounted(() => {
-	console.log("Current snippets on mount: ", snippets.value);
-	store.getSnippets();
+	if (snippets.value.length === 0) {
+		store.getSnippets();
+	}
 });
 </script>

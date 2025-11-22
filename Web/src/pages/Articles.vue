@@ -53,9 +53,7 @@ const snippetsStore = useSnippetsStore();
 
 const onExpandArticle = async (articleTitle: string) => {
 	await snippetsStore.getSnippets(articleTitle);
-	console.log("Snippets for article:", snippetsStore.snippets);
-	// possibly redirect to snippets page with a query param that fills out the search bar.
-	// or if the store is persistent across pages, find a way to not refetch the snippets on mount of snippets page
+  window.location.hash = `/`;
 };
 
 const onSearch = async (query: string) => {

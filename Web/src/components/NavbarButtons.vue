@@ -1,10 +1,10 @@
 <template>
-	<div class="p-4 flex space-x-4">
+	<div class="p-4 flex gap-3">
 		<a
 			v-for="(path, name) in paths"
 			:key="name"
 			:href="path"
-			:class="currentPath === path ? 'text-blue-700 font-bold' : 'text-blue-500 hover:underline'">
+			:class="[ 'nav-button', currentPath === path ? 'nav-button--active' : '' ]">
 			{{ name }}
 		</a>
 	</div>
@@ -21,8 +21,6 @@ const paths = {
 const currentPath = ref(window.location.hash);
 
 window.addEventListener("hashchange", () => {
-	if (window.location.hash in paths) {
-		currentPath.value = window.location.hash;
-	}
+	currentPath.value = window.location.hash;
 });
 </script>

@@ -1,1 +1,72 @@
 @import "tailwindcss";
+
+:root {
+	--bg: #0f1724; /* dark slate */
+	--panel: #111827; /* dark panel */
+	--muted: #94a3b8; /* muted text */
+	--text: #e6eef8; /* main text */
+	--accent: #ff7a18; /* orange accent */
+	--accent-600: #ff6b00;
+}
+
+html, body, #app {
+	background-color: var(--bg);
+	color: var(--text);
+}
+
+/* Reusable link-as-button */
+.link-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.45rem 0.8rem;
+	background: linear-gradient(180deg, var(--accent) 0%, var(--accent-600) 100%);
+	color: #0b0b0b;
+	border-radius: 9999px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: transform .08s ease, box-shadow .12s ease, opacity .12s ease;
+}
+.link-button:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+	opacity: 0.98;
+}
+
+.card-panel {
+	background-color: #0b1220; /* slightly different dark */
+	border-radius: 12px;
+	padding: 1.25rem;
+}
+
+.rounded-input {
+	border-radius: 10px;
+}
+
+/* Navbar button styles */
+.nav-button {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.4rem 0.75rem;
+	border-radius: 9999px;
+	background: transparent;
+	color: var(--text);
+	border: 1px solid rgba(255,255,255,0.04);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.nav-button--active {
+	background: linear-gradient(180deg, rgba(255,122,24,0.95) 0%, rgba(255,107,0,0.95) 100%);
+	color: #071018;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+.danger-button {
+	background: linear-gradient(180deg,#ff6b6b,#ff4c4c);
+	color: #fff;
+	padding: 0.25rem 0.5rem;
+	border-radius: 8px;
+	font-weight: 600;
+}
+

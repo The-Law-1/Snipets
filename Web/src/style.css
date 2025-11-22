@@ -62,11 +62,22 @@ html, body, #app {
 	box-shadow: 0 6px 18px rgba(0,0,0,0.45);
 }
 
+.nav-button:not(.nav-button--active):hover {
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+}
+
 .danger-button {
 	background: linear-gradient(180deg,#ff6b6b,#ff4c4c);
 	color: #fff;
 	padding: 0.25rem 0.5rem;
 	border-radius: 8px;
 	font-weight: 600;
+}
+
+.danger-button:hover {
+  background: linear-gradient(180deg,#ff5a5a,#ff3b3b);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(255,74,74,0.12);
 }
 

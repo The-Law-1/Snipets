@@ -14,7 +14,7 @@
 
 				<button
 					@click="onDelete"
-					class="ml-2 danger-button hover:cursor-pointer  text-xs">
+					class="ml-2 danger-button hover:cursor-pointer text-xs">
 					Delete
 				</button>
 			</div>

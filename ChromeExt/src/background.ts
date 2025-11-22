@@ -24,72 +24,67 @@ async function getSettings(): Promise<Settings> {
 
 // Send the selected text to your API
 async function sendSelectedText(text: string, pageUrl?: string, pageTitle?: string): Promise<Response> {
-  const { endpoint, apiKey } = await getSettings();
+	const { endpoint, apiKey } = await getSettings();
 
-  if (!endpoint) {
-    throw new Error(
-      "No endpoint configured. Open the extension Options and set an API endpoint."
-    );
-  }
+	if (!endpoint) {
+		throw new Error("No endpoint configured. Open the extension Options and set an API endpoint.");
+	}
 
-  // Payload now includes URL and title
-  const body = JSON.stringify({
-    text,
-    url: pageUrl,
-    title: pageTitle,
-  });
+	// Payload now includes URL and title
+	const body = JSON.stringify({
+		text,
+		url: pageUrl,
+		title: pageTitle
+	});
 
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-  };
-  if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
+	const headers: Record<string, string> = {
+		"Content-Type": "application/json"
+	};
+	if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
 
-  const path = `${endpoint}/snippets`
+	const path = `${endpoint}/snippets`;
 
-  return fetch(path, {
-    method: "POST",
-    headers,
-    body,
-  });
+	return fetch(path, {
+		method: "POST",
+		headers,
+		body
+	});
 }
 
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (info.menuItemId !== MENU_ID) return;
+	if (info.menuItemId !== MENU_ID) return;
 
-  const selected = (info.selectionText || "").trim();
-  if (!selected) {
-    console.warn("No selection text detected.");
-    return;
-  }
+	const selected = (info.selectionText || "").trim();
+	if (!selected) {
+		console.warn("No selection text detected.");
+		return;
+	}
 
-  const pageUrl = info.pageUrl || tab?.url || "";
-  const pageTitle = tab?.title || "";
+	const pageUrl = info.pageUrl || tab?.url || "";
+	const pageTitle = tab?.title || "";
 
-  try {
-    const res = await sendSelectedText(selected, pageUrl, pageTitle);
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("API error", res.status, text);
-      await notify(
-        `API error: ${res.status} ${res.statusText}`,
-        text.slice(0, 120) || undefined
-      );
-    } else {
-      await notify("Sent ✓", `Text + URL + title sent.`);
-    }
-  } catch (err: any) {
-    console.error(err);
-    await notify("Failed to send", err?.message || String(err));
-  }
+	try {
+		const res = await sendSelectedText(selected, pageUrl, pageTitle);
+		if (!res.ok) {
+			const text = await res.text();
+			console.error("API error", res.status, text);
+			await notify(`API error: ${res.status} ${res.statusText}`, text.slice(0, 120) || undefined);
+		} else {
+			await notify("Sent ✓", `Text + URL + title sent.`);
+		}
+	} catch (err: any) {
+		console.error(err);
+		await notify("Failed to send", err?.message || String(err));
+	}
 });
 
 // Simple user feedback via notification
 async function notify(title: string, message?: string) {
-  // Get the active tab
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]?.id) {
-      chrome.tabs.sendMessage(tabs[0].id, { type: "SHOW_ALERT", message: `${title}\n${message || ""}` });
-    }
-  });
+	// Get the active tab
+	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+		if (tabs[0]?.id) {
+			chrome.tabs.sendMessage(tabs[0].id, { type: "SHOW_ALERT", message: `${title}\n${message || ""}` });
+		}
+	});
 }

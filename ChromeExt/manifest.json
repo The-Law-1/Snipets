@@ -8,11 +8,11 @@
 	"background": {
 		"service_worker": "dist/background.js"
 	},
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["dist/contentScript.js"]
-    }
-  ],
+	"content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["dist/contentScript.js"]
+		}
+	],
 	"options_page": "options.html"
 }

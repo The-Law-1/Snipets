@@ -1,21 +1,20 @@
 from domain.snippet import CreateSnippet
-
 from models.snippet import Snippet
-from db import store
-
-from datetime import datetime
+from sqlalchemy.orm import Session
 
 
 class SaveSnippet:
-    # * should take a "createSnippet" domain object, call a repo, and return a "Snippet" domain object
-    def save(self, snippet: CreateSnippet) -> Snippet:
-        try:
-            with store.open_session() as session:
-                snippet_model = Snippet(**snippet.dict())
-                snippet_model.created_at = datetime.now()  # Set the creation timestamp
-                session.store(snippet_model)
-                session.save_changes()
-                return snippet_model
-        except Exception as e:
-            print(f"Error saving snippet: {e}")
-            raise e
+    def __init__(self, db: Session):
+        self.db = db
+
+    def save(self, snippet: CreateSnippet, user_id: str) -> Snippet:
+        snippet_model = Snippet(
+            text=snippet.text,
+            title=snippet.title,
+            url=snippet.url,
+            user_id=user_id,
+        )
+        self.db.add(snippet_model)
+        self.db.commit()
+        self.db.refresh(snippet_model)
+        return snippet_model

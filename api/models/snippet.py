@@ -1,11 +1,19 @@
-class Snippet:
-    collection = "Snippets"  # RavenDB collection name
+from sqlalchemy import Column, DateTime, ForeignKey, String, Text
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+from uuid import uuid4
 
-    def __init__(
-        self, text: str, title: str, url: str, Id: str = None, created_at=None
-    ):
-        self.Id = Id
-        self.text = text
-        self.title = title
-        self.url = url
-        self.created_at = created_at
+from db import Base
+
+
+class Snippet(Base):
+    __tablename__ = "snippets"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid4()))
+    user_id = Column(String, ForeignKey("users.id"), nullable=False, index=True)
+    text = Column(Text, nullable=False)
+    title = Column(String, nullable=False)
+    url = Column(String, nullable=True)
+    created_at = Column(DateTime, server_default=func.now(), nullable=False, index=True)
+
+    user = relationship("User", back_populates="snippets")

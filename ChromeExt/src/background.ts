@@ -1,15 +1,15 @@
 const MENU_ID = "send-selected-text" as const;
 
 type Settings = {
-	endpoint?: string; // e.g. https://api.example.com/ingest
-	apiKey?: string; // optional, if your API requires it
+	endpoint?: string;
+	apiKey?: string;
 };
 
 chrome.runtime.onInstalled.addListener(() => {
 	chrome.contextMenus.create({
 		id: MENU_ID,
-		title: "Send selected text to API",
-		contexts: ["selection"]
+		title: "Save snippet to Snipets",
+		contexts: ["selection"],
 	});
 });
 
@@ -30,24 +30,28 @@ async function sendSelectedText(text: string, pageUrl?: string, pageTitle?: stri
 		throw new Error("No endpoint configured. Open the extension Options and set an API endpoint.");
 	}
 
+	if (!apiKey) {
+		throw new Error("No API key configured. Please sign in from the Options page.");
+	}
+
 	// Payload now includes URL and title
 	const body = JSON.stringify({
 		text,
 		url: pageUrl,
-		title: pageTitle
+		title: pageTitle || "Untitled",
 	});
 
 	const headers: Record<string, string> = {
-		"Content-Type": "application/json"
+		"Content-Type": "application/json",
+		Authorization: `Bearer ${apiKey}`,
 	};
-	if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
 
 	const path = `${endpoint}/snippets`;
 
 	return fetch(path, {
 		method: "POST",
 		headers,
-		body
+		body,
 	});
 }
 
@@ -62,7 +66,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 	}
 
 	const pageUrl = info.pageUrl || tab?.url || "";
-	const pageTitle = tab?.title || "";
+	const pageTitle = tab?.title || "Untitled";
 
 	try {
 		const res = await sendSelectedText(selected, pageUrl, pageTitle);
@@ -71,20 +75,22 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 			console.error("API error", res.status, text);
 			await notify(`API error: ${res.status} ${res.statusText}`, text.slice(0, 120) || undefined);
 		} else {
-			await notify("Sent ✓", `Text + URL + title sent.`);
+			await notify("Saved ✓", `Snippet saved to Snipets!`);
 		}
 	} catch (err: any) {
 		console.error(err);
-		await notify("Failed to send", err?.message || String(err));
+		await notify("Failed to save", err?.message || String(err));
 	}
 });
 
 // Simple user feedback via notification
 async function notify(title: string, message?: string) {
-	// Get the active tab
 	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 		if (tabs[0]?.id) {
-			chrome.tabs.sendMessage(tabs[0].id, { type: "SHOW_ALERT", message: `${title}\n${message || ""}` });
+			chrome.tabs.sendMessage(tabs[0].id, {
+				type: "SHOW_ALERT",
+				message: `${title}\n${message || ""}`,
+			});
 		}
 	});
 }

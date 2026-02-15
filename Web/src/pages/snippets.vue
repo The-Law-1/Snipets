@@ -24,26 +24,38 @@
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
 import { useSnippetsStore } from "@/store/snippets";
+import { useAuthStore } from "@/store/auth";
 import SearchBar from "@/components/SearchBar.vue";
 import SnippetCard from "@/components/SnippetCard.vue";
 import NavbarButtons from "@/components/NavbarButtons.vue";
 
 const store = useSnippetsStore();
+const authStore = useAuthStore();
 const snippets = computed(() => store.snippets);
 const loading = computed(() => store.loading);
 const error = computed(() => store.error);
 
 const onSearch = async (query: string) => {
-	await store.getSnippets(query);
+	const token = authStore.getAuthToken();
+	if (token) {
+		await store.getSnippets(token, query);
+	}
 };
 
-const onDelete = async (id: number) => {
-	await store.deleteSnippet(id);
+const onDelete = async (id: string) => {
+	const token = authStore.getAuthToken();
+	if (token) {
+		await store.deleteSnippet(id, token);
+	}
 };
 
-onMounted(() => {
+onMounted(async () => {
 	if (snippets.value.length === 0) {
-		store.getSnippets();
+		const token = authStore.getAuthToken();
+		if (token) {
+			await store.getSnippets(token);
+		}
 	}
 });
 </script>
+

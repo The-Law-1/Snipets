@@ -1,5 +1,10 @@
 fastapi
-ravendb
+sqlalchemy
+psycopg2-binary
 pydantic
 uvicorn
 black
+python-jose[cryptography]
+requests
+pytest
+httpx

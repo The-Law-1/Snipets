@@ -27,28 +27,40 @@
 <script setup lang="ts">
 import { computed, onMounted } from "vue";
 import { useArticleStore } from "@/store/articles";
+import { useSnippetsStore } from "@/store/snippets";
+import { useAuthStore } from "@/store/auth";
 import SearchBar from "@/components/SearchBar.vue";
 import ArticleCard from "@/components/ArticleCard.vue";
 import NavbarButtons from "@/components/NavbarButtons.vue";
-import { useSnippetsStore } from "@/store/snippets";
 
 const store = useArticleStore();
+const snippetsStore = useSnippetsStore();
+const authStore = useAuthStore();
+
 const articles = computed(() => store.articles);
 const loading = computed(() => store.loading);
 const error = computed(() => store.error);
 
-const snippetsStore = useSnippetsStore();
-
 const onExpandArticle = async (articleTitle: string) => {
-	await snippetsStore.getSnippets(articleTitle);
-  window.location.hash = `/`;
+	const token = authStore.getAuthToken();
+	if (token) {
+		await snippetsStore.getSnippets(token, articleTitle);
+		window.location.hash = "#/";
+	}
 };
 
 const onSearch = async (query: string) => {
-	await store.getArticles(query);
+	const token = authStore.getAuthToken();
+	if (token) {
+		await store.getArticles(query, token);
+	}
 };
 
-onMounted(() => {
-	store.getArticles();
+onMounted(async () => {
+	const token = authStore.getAuthToken();
+	if (token) {
+		await store.getArticles("", token);
+	}
 });
 </script>
+

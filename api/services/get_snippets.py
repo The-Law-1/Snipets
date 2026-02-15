@@ -1,33 +1,27 @@
-from models.snippet import Snippet
-from db import store
 from typing import List
 
-from ravendb.documents.queries.misc import SearchOperator
+from models.snippet import Snippet
+from sqlalchemy.orm import Session
 
 
 class GetSnippets:
-    def get_by_title(self, title: str) -> List[Snippet]:
-        try:
-            with store.open_session() as session:
-                snippets = list(
-                    session.query_collection("Snippets")
-                    .search("title", title, operator=SearchOperator.AND)
-                    .order_by_descending("created_at")
-                )
-                return snippets
-        except Exception as e:
-            print(f"Error retrieving snippets by title: {e}")
-            return []
+    def __init__(self, db: Session):
+        self.db = db
 
-    def get_all(self) -> List[Snippet]:
-        try:
-            with store.open_session() as session:
-                snippets = list(
-                    session.query_collection("Snippets")
-                    .order_by_descending("created_at")
-                    .take(50)
-                )
-                return snippets
-        except Exception as e:
-            print(f"Error retrieving snippets: {e}")
-            return []
+    def get_by_title(self, user_id: str, title: str) -> List[Snippet]:
+        return (
+            self.db.query(Snippet)
+            .filter(Snippet.user_id == user_id, Snippet.title.ilike(f"%{title}%"))
+            .order_by(Snippet.created_at.desc())
+            .limit(50)
+            .all()
+        )
+
+    def get_all(self, user_id: str) -> List[Snippet]:
+        return (
+            self.db.query(Snippet)
+            .filter(Snippet.user_id == user_id)
+            .order_by(Snippet.created_at.desc())
+            .limit(50)
+            .all()
+        )

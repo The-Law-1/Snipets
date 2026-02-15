@@ -14,14 +14,21 @@ export const useArticleStore = defineStore("articles", {
 	state: () => ({
 		articles: [] as Article[],
 		loading: false,
-		error: null as string | null
+		error: null as string | null,
 	}),
 	actions: {
-		async getArticles(titleSearch: string = "") {
+		async getArticles(titleSearch: string = "", token: string = "") {
 			this.loading = true;
 			this.error = null;
 			try {
-				const res = await fetch(`${BASE_URL}/articles?title=${titleSearch}`);
+				const headers: Record<string, string> = {};
+				if (token) {
+					headers["Authorization"] = `Bearer ${token}`;
+				}
+
+				const res = await fetch(`${BASE_URL}/articles?title=${titleSearch}`, {
+					headers,
+				});
 				const json = await res.json();
 				if (!res.ok) {
 					this.error = json.message || "Failed to fetch articles";
@@ -33,6 +40,6 @@ export const useArticleStore = defineStore("articles", {
 			} finally {
 				this.loading = false;
 			}
-		}
-	}
+		},
+	},
 });

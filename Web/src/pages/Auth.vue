@@ -108,6 +108,8 @@ async function handleSubmit() {
 		if (isLogin.value) {
 			// SIGN IN
 			await authStore.signIn(form.value.email, form.value.password);
+			// redirect to home
+			window.location.hash = "#/";
 		} else {
 			// SIGN UP + CREATE PROFILE
 			validatePasswords();

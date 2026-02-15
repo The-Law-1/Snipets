@@ -2,3 +2,7 @@ ravendb_data/
 .env
 
 skills/
+
+supabase/.branches/
+supabase/.temp
+supabase/.env

@@ -7,7 +7,7 @@ npm i
 npm run build
 ```
 
-You *may* need to update the manifest.json with the correct port for your api server.
+You *may* need to update the manifest.json with the correct port for your edge function endpoint.
 
 ## Installation
 
@@ -19,4 +19,4 @@ You *may* need to update the manifest.json with the correct port for your api se
 
 4. Load the entire ChromeExt directory
 
-5. Open the settings of the Snipets extension, type in the host of your api, and let it rip.
+5. Open the settings of the Snipets extension, set your edge function URL (for example, http://localhost:54321/functions/v1/api).

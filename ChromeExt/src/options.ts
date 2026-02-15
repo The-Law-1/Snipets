@@ -52,7 +52,7 @@ signInButton.addEventListener("click", async () => {
 		const token = data.access_token;
 
 		chrome.storage.sync.set(
-			{ apiKey: token, endpoint: "http://localhost:8000" },
+			{ apiKey: token, endpoint: "http://localhost:54321/functions/v1/api" },
 			() => {
 				statusSpan.textContent = "Signed in successfully!";
 				authSection.style.display = "none";

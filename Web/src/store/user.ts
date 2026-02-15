@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
 
-const API_URL = import.meta.env.VITE_API_URL || process.env.API_URL;
-const API_PORT = import.meta.env.VITE_API_PORT || process.env.API_PORT;
-const BASE_URL = `${API_URL}:${API_PORT}`;
+const EDGE_URL = import.meta.env.VITE_EDGE_URL;
+const API_URL = import.meta.env.VITE_API_URL;
+const API_PORT = import.meta.env.VITE_API_PORT;
+const BASE_URL = EDGE_URL || `${API_URL}:${API_PORT}`;
 
 export interface User {
 	id: string;

@@ -41,9 +41,10 @@ export const useAuthStore = defineStore("auth", {
 				}
 
 				const data = await response.json();
-				this.session = data.session;
+				// TODO when you start asking for email confirmation
+				// you'll need to change this flow
 				this.user = data.user;
-				localStorage.setItem("auth_token", data.session.access_token);
+				localStorage.setItem("auth_token", data.access_token);
 			} catch (err: any) {
 				this.error = err.message || "Sign up failed";
 				throw err;

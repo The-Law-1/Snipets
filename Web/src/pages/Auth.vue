@@ -52,7 +52,7 @@
 
 				<div v-if="error" class="error-message">{{ error }}</div>
 
-				<button type="submit" class="auth-btn" :disabled="loading || passwordError">
+				<button type="submit" class="auth-btn" :disabled="loading || passwordError.length > 0">
 					{{ loading ? "Loading..." : isLogin ? "Log In" : "Create Account" }}
 				</button>
 			</form>
@@ -130,7 +130,6 @@ async function handleSubmit() {
 
 <style scoped>
 .auth-container {
-	min-h-screen;
 	display: flex;
 	align-items: center;
 	justify-content: center;

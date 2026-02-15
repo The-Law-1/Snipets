@@ -39,7 +39,7 @@ def _get_jwks() -> Dict[str, dict]:
 
 
 def get_current_user_id(authorization: Optional[str] = Header(default=None)) -> str:
-    if os.environ.get("DISABLE_AUTH"):
+    if os.environ.get("DISABLE_AUTH") == "true":
         return os.environ.get("AUTH_BYPASS_USER_ID", "test-user")
 
     if not authorization or not authorization.startswith("Bearer "):
@@ -60,7 +60,7 @@ def get_current_user_id(authorization: Optional[str] = Header(default=None)) -> 
         claims = jwt.decode(
             token,
             key,
-            algorithms=["RS256"],
+            algorithms=["RS256", "ES256"],
             options={"verify_aud": False},
         )
     except HTTPException:

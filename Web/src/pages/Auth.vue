@@ -71,6 +71,11 @@
 import { ref } from "vue";
 import { useAuthStore } from "@/store/auth";
 import { useUserStore } from "@/store/user";
+import {useToast} from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
+const $toast = useToast();
+
 
 const authStore = useAuthStore();
 const userStore = useUserStore();
@@ -115,11 +120,12 @@ async function handleSubmit() {
 			const token = authStore.getAuthToken();
 			if (token) {
 				await userStore.createProfile(form.value.username, token);
+				$toast.success('Account created successfully! You may log in now.', {
+					position: 'top',
+					duration: 5000,
+				});
 			}
 		}
-
-		// Redirect to main app
-		window.location.hash = "#/";
 	} catch (err: any) {
 		error.value = err.message || "Authentication failed";
 	} finally {

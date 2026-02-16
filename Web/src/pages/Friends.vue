@@ -1,7 +1,7 @@
 <template>
 	<div class="min-h-screen bg-gray-900 p-6 text-gray-100">
 		<div class="max-w-2xl mx-auto">
-			<div class="text-center text-3xl font-bold mb-6">Find People</div>
+			<PageHeader title="Find People" />
 
 			<form @submit.prevent="handleSearch" class="mb-8">
 				<div class="flex gap-2">
@@ -48,6 +48,7 @@
 import { ref } from "vue";
 import { useUserStore } from "@/store/user";
 import { useAuthStore } from "@/store/auth";
+import PageHeader from "@/components/PageHeader.vue";
 
 const userStore = useUserStore();
 const authStore = useAuthStore();

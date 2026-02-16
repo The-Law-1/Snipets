@@ -13,7 +13,7 @@ Deno.serve(async (request) => {
 
 	try {
 		// GET /snippets - List snippets with optional title search
-		if (request.method === "GET" && segments.length === 0) {
+		if (request.method === "GET") {
 			const { client, user } = await requireUser(request);
 			const title = url.searchParams.get("title") || "";
 			let query = client
@@ -34,7 +34,7 @@ Deno.serve(async (request) => {
 		}
 
 		// POST /snippets - Create new snippet
-		if (request.method === "POST" && segments.length === 0) {
+		if (request.method === "POST") {
 			const { client, user } = await requireUser(request);
 			const body = await parseJson<{ text?: string; title?: string; url?: string }>(request);
 			if (!body.text || !body.title) {
@@ -57,7 +57,7 @@ Deno.serve(async (request) => {
 		}
 
 		// DELETE /snippets/:id - Delete snippet
-		if (request.method === "DELETE" && segments.length === 1) {
+		if (request.method === "DELETE") {
 			const { client, user } = await requireUser(request);
 			const snippetId = decodeURIComponent(segments[0]);
 			const { data, error } = await client

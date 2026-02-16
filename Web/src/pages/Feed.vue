@@ -1,7 +1,7 @@
 <template>
 	<div class="min-h-screen bg-gray-900 p-6 text-gray-100">
 		<div class="max-w-4xl mx-auto">
-			<div class="text-center text-3xl font-bold mb-6">Friend Activity Feed</div>
+			<PageHeader title="Friend Activity Feed" />
 
 			<div v-if="loading" class="text-center py-8 text-gray-400">Loading feed...</div>
 			<div v-if="error" class="text-center py-8 text-red-400">{{ error }}</div>
@@ -40,6 +40,7 @@
 import { computed, onMounted } from "vue";
 import { useFeedStore } from "@/store/feed";
 import { useAuthStore } from "@/store/auth";
+import PageHeader from "@/components/PageHeader.vue";
 
 const feedStore = useFeedStore();
 const authStore = useAuthStore();

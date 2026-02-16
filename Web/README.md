@@ -7,5 +7,7 @@ Set these env vars to point the app at your Supabase project:
 ```sh
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
-VITE_EDGE_URL=https://your-project.supabase.co/functions/v1/api
+VITE_EDGE_URL=https://your-project.supabase.co/functions/v1
 ```
+
+**Note:** The `VITE_EDGE_URL` should point to the base Edge Functions URL (without `/api`). The app will automatically append the correct function names (`/snippets`, `/articles`, `/auth`, `/users`, `/feed`).

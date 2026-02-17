@@ -21,7 +21,7 @@ export const useUserStore = defineStore("user", {
 			this.loading = true;
 			this.error = null;
 			try {
-				const res = await fetch(`${BASE_URL}/auth/profile/`, {
+				const res = await fetch(`${BASE_URL}/auth/`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -50,7 +50,7 @@ export const useUserStore = defineStore("user", {
 			this.loading = true;
 			this.error = null;
 			try {
-				const res = await fetch(`${BASE_URL}/users/search?q=${encodeURIComponent(query)}`);
+				const res = await fetch(`${BASE_URL}/users?q=${encodeURIComponent(query)}`);
 				const json = await res.json();
 				if (!res.ok) {
 					throw new Error(json.detail || "Failed to search users");
@@ -68,7 +68,7 @@ export const useUserStore = defineStore("user", {
 			this.loading = true;
 			this.error = null;
 			try {
-				const res = await fetch(`${BASE_URL}/users/follow?username=${encodeURIComponent(username)}`, {
+				const res = await fetch(`${BASE_URL}/users?username=${encodeURIComponent(username)}`, {
 					method: "POST",
 					headers: {
 						Authorization: `Bearer ${token}`,

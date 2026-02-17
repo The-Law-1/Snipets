@@ -9,11 +9,10 @@ Deno.serve(async (request) => {
 	}
 
 	const url = new URL(request.url);
-	const segments = url.pathname.split("/").filter(Boolean);
 
 	try {
 		// GET /search - Search users by username
-		if (segments[0] === "search" && request.method === "GET") {
+		if (request.method === "GET") {
 			const token = getBearerToken(request) || undefined;
 			const client = createSupabaseClient(token);
 			const query = url.searchParams.get("q") || "";
@@ -30,7 +29,7 @@ Deno.serve(async (request) => {
 		}
 
 		// POST /follow - Follow a user by username
-		if (segments[0] === "follow" && request.method === "POST") {
+		if (request.method === "POST") {
 			const { client, user } = await requireUser(request);
 			const username = url.searchParams.get("username") || "";
 			if (!username) {

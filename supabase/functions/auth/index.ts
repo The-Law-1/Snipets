@@ -9,11 +9,10 @@ Deno.serve(async (request) => {
 	}
 
 	const url = new URL(request.url);
-	const segments = url.pathname.split("/").filter(Boolean);
 
 	try {
 		// POST /profile - Create user profile
-		if (request.method === "POST" && segments[0] === "profile") {
+		if (request.method === "POST") {
 			const { client, user } = await requireUser(request);
 			const body = await parseJson<{ username?: string }>(request);
 			const username = body.username?.trim();

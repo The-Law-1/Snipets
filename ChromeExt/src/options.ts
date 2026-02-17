@@ -4,23 +4,15 @@ function byId<T extends HTMLElement = HTMLElement>(id: string): T {
 	return el as T;
 }
 
-const endpointInput = byId<HTMLInputElement>("endpoint");
 const emailInput = byId<HTMLInputElement>("email");
 const passwordInput = byId<HTMLInputElement>("password");
 const signInButton = byId<HTMLButtonElement>("signIn");
-const saveButton = byId<HTMLButtonElement>("save");
 const statusSpan = byId<HTMLSpanElement>("status");
 const authSection = byId<HTMLDivElement>("authSection");
-const settingsSection = byId<HTMLDivElement>("settingsSection");
 
-// Load saved settings into the form
-chrome.storage.sync.get(["endpoint", "apiKey"], (items) => {
-	endpointInput.value = items.endpoint || "";
-	if (items.apiKey) {
-		authSection.style.display = "none";
-		settingsSection.style.display = "block";
-	}
-});
+const SUPABASE_URL = "https://lsnbxwsivlwbpdxjhyma.supabase.co"
+const SUPABASE_ANON_KEY = "sb_publishable_-aycBC_FDZAmZFwt-a0uJw_nfOd5Tdb"
+const EDGE_URL = "https://lsnbxwsivlwbpdxjhyma.supabase.co/functions/v1";
 
 // Sign in to Supabase and store JWT
 signInButton.addEventListener("click", async () => {
@@ -38,9 +30,13 @@ signInButton.addEventListener("click", async () => {
 	try {
 		// For now, we'll use the API to get auth token via the web frontend
 		// In production, you'd use Supabase Auth directly or get token from web session
-		const response = await fetch("http://localhost:3000/auth/login", {
+		const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: { 
+				"Content-Type": "application/json",
+				apikey: SUPABASE_ANON_KEY,
+
+			},
 			body: JSON.stringify({ email, password }),
 		});
 
@@ -52,12 +48,11 @@ signInButton.addEventListener("click", async () => {
 		const token = data.access_token;
 
 		chrome.storage.sync.set(
-			{ apiKey: token, endpoint: "http://localhost:54321/functions/v1/api" },
+			{ apiKey: token, endpoint: EDGE_URL },
 			() => {
-				statusSpan.textContent = "Signed in successfully!";
-				authSection.style.display = "none";
-				settingsSection.style.display = "block";
-				setTimeout(() => (statusSpan.textContent = ""), 2000);
+				statusSpan.textContent = "Signed in successfully! Select some text then right-click to save it.";
+				//authSection.style.display = "none";
+				//setTimeout(() => (statusSpan.textContent = ""), 2000);
 			}
 		);
 	} catch (err: any) {
@@ -65,12 +60,4 @@ signInButton.addEventListener("click", async () => {
 	} finally {
 		signInButton.disabled = false;
 	}
-});
-
-saveButton.addEventListener("click", () => {
-	const endpoint = endpointInput.value.trim();
-	chrome.storage.sync.set({ endpoint }, () => {
-		statusSpan.textContent = "Saved.";
-		setTimeout(() => (statusSpan.textContent = ""), 1500);
-	});
 });

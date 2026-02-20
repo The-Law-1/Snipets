@@ -32,11 +32,19 @@
 						<h3 class="username">{{ user.username }}</h3>
 					</div>
 					<button
-						@click="followUser(user.username)"
-						:disabled="loadingFollow === user.id"
+						@click="toggleFollow(user)"
+						:disabled="loadingFollow === user.username"
 						class="follow-btn"
 					>
-						{{ loadingFollow === user.id ? "Following..." : "Follow" }}
+						{{
+							loadingFollow === user.username
+								? user.is_following
+									? "Unfollowing..."
+									: "Following..."
+								: user.is_following
+									? "Unfollow"
+									: "Follow"
+						}}
 					</button>
 				</div>
 			</div>
@@ -46,7 +54,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useUserStore } from "@/store/user";
+import { useUserStore, type SearchUserResult } from "@/store/user";
 import { useAuthStore } from "@/store/auth";
 import PageHeader from "@/components/PageHeader.vue";
 
@@ -54,7 +62,7 @@ const userStore = useUserStore();
 const authStore = useAuthStore();
 
 const searchQuery = ref("");
-const results = ref<any[]>([]);
+const results = ref<SearchUserResult[]>([]);
 const loading = ref(false);
 const loadingFollow = ref<string | null>(null);
 const error = ref("");
@@ -66,19 +74,37 @@ async function handleSearch() {
 	loading.value = true;
 	error.value = "";
 	searched.value = true;
-	results.value = await userStore.searchUsers(searchQuery.value);
-	loading.value = false;
+
+	try {
+		const token = authStore.getAuthToken() || undefined;
+		const currentUserId = authStore.userId;
+		const users = await userStore.searchUsers(searchQuery.value, token);
+		results.value = currentUserId
+			? users.filter((user: SearchUserResult) => user.id !== currentUserId)
+			: users;
+	} catch (err: any) {
+		error.value = err.message || "Failed to search users";
+		results.value = [];
+	} finally {
+		loading.value = false;
+	}
 }
 
-async function followUser(username: string) {
+async function toggleFollow(user: SearchUserResult) {
 	const token = authStore.getAuthToken();
 	if (!token) return;
 
-	loadingFollow.value = username;
+	loadingFollow.value = user.username;
 	error.value = "";
 
 	try {
-		await userStore.followUser(username, token);
+		if (user.is_following) {
+			await userStore.unfollowUser(user.username, token);
+			user.is_following = false;
+		} else {
+			await userStore.followUser(user.username, token);
+			user.is_following = true;
+		}
 	} catch (err: any) {
 		error.value = err.message;
 	} finally {

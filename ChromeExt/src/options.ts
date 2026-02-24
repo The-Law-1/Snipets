@@ -41,6 +41,10 @@ signInButton.addEventListener("click", async () => {
 		});
 
 		if (!response.ok) {
+			if (response.status === 400) {
+				const data = await response.json();
+				throw new Error(data.error_description || "Invalid credentials");
+			}
 			throw new Error("Sign in failed");
 		}
 

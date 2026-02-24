@@ -68,6 +68,9 @@ export const useAuthStore = defineStore("auth", {
 
 				if (!response.ok) {
 					const data = await response.json();
+					if (response.status === 400) {
+						throw new Error(data.error_description || "Invalid credentials");
+					}
 					throw new Error(data.error_description || "Sign in failed");
 				}
 

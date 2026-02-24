@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 
 export default () => {
 	return defineConfig({
+		base: "/Snipets/",
 
 		plugins: [vue(), tailwindcss()],
 		resolve: {

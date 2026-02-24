@@ -1,9 +1,7 @@
 import { defineStore } from "pinia";
 
 const EDGE_URL = import.meta.env.VITE_EDGE_URL;
-const API_URL = import.meta.env.VITE_API_URL;
-const API_PORT = import.meta.env.VITE_API_PORT;
-const BASE_URL = EDGE_URL || `${API_URL}:${API_PORT}`;
+const BASE_URL = EDGE_URL;
 
 export interface FeedItem {
 	snippet: {
@@ -35,6 +33,9 @@ export const useFeedStore = defineStore("feed", {
 
 				const json = await res.json();
 				if (!res.ok) {
+					if (res.status === 401) {
+						throw new Error("Unauthorized. Please sign in again.");
+					}
 					this.error = json.detail || "Failed to fetch feed";
 					return;
 				}

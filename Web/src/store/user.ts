@@ -1,9 +1,7 @@
 import { defineStore } from "pinia";
 
 const EDGE_URL = import.meta.env.VITE_EDGE_URL;
-const API_URL = import.meta.env.VITE_API_URL;
-const API_PORT = import.meta.env.VITE_API_PORT;
-const BASE_URL = EDGE_URL || `${API_URL}:${API_PORT}`;
+const BASE_URL = EDGE_URL;
 
 export interface User {
 	id: string;
@@ -36,6 +34,9 @@ export const useUserStore = defineStore("user", {
 
 				const json = await res.json();
 				if (!res.ok) {
+					if (res.status === 400) {
+						throw new Error("Username already in use.");
+					}
 					this.error = json.detail || "Failed to create profile";
 					throw new Error(json.detail);
 				}
@@ -62,6 +63,9 @@ export const useUserStore = defineStore("user", {
 				const res = await fetch(`${BASE_URL}/users?q=${encodeURIComponent(query)}`, { headers });
 				const json = await res.json();
 				if (!res.ok) {
+					if (res.status === 401) {
+						throw new Error("Unauthorized. Please sign in again.");
+					}
 					throw new Error(json.detail || "Failed to search users");
 				}
 				return json.data || [];
@@ -86,6 +90,9 @@ export const useUserStore = defineStore("user", {
 
 				const json = await res.json();
 				if (!res.ok) {
+					if (res.status === 401) {
+						throw new Error("Unauthorized. Please sign in again.");
+					}
 					throw new Error(json.detail || "Failed to follow user");
 				}
 				return json;
@@ -110,6 +117,9 @@ export const useUserStore = defineStore("user", {
 
 				const json = await res.json();
 				if (!res.ok) {
+					if (res.status === 401) {
+						throw new Error("Unauthorized. Please sign in again.");
+					}
 					throw new Error(json.detail || "Failed to unfollow user");
 				}
 				return json;

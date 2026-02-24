@@ -26,7 +26,7 @@ Deno.serve(async (request) => {
 
 			const { data: snippets, error: snippetsError } = await client
 				.from("snippets")
-				.select("id, text, title, url, created_at, user_id, users(username)")
+				.select("id, text, title, url, created_at, user_id")
 				.in("user_id", followingIds)
 				.order("created_at", { ascending: false })
 				.limit(50);
@@ -34,14 +34,28 @@ Deno.serve(async (request) => {
 				throw { status: 400, message: snippetsError.message };
 			}
 
-			const items = (snippets || []).map((snippet) => ({
+			const snippetRows = snippets || [];
+			const snippetUserIds = Array.from(new Set(snippetRows.map((snippet) => snippet.user_id)));
+			let usernamesById = new Map<string, string>();
+			if (snippetUserIds.length > 0) {
+				const { data: users, error: usersError } = await client
+					.from("users")
+					.select("id, username")
+					.in("id", snippetUserIds);
+				if (usersError) {
+					throw { status: 400, message: usersError.message };
+				}
+				usernamesById = new Map((users || []).map((row) => [row.id, row.username]));
+			}
+
+			const items = snippetRows.map((snippet) => ({
 				snippet: {
 					id: snippet.id,
 					text: snippet.text,
 					title: snippet.title,
 					url: snippet.url,
 					created_at: snippet.created_at,
-					username: snippet.users?.username || "",
+					username: usernamesById.get(snippet.user_id) || "",
 				},
 			}));
 

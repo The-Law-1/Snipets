@@ -21,6 +21,12 @@ export const useFeedStore = defineStore("feed", {
 		error: null as string | null,
 	}),
 	actions: {
+		resetFeedState() {
+			this.items = [];
+			this.error = null;
+			this.loading = false;
+		},
+
 		async getFeed(token: string) {
 			this.loading = true;
 			this.error = null;

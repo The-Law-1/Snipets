@@ -19,6 +19,12 @@ export const useSnippetsStore = defineStore("snippets", {
 		error: null as string | null,
 	}),
 	actions: {
+		resetSnippetsState() {
+			this.snippets = [];
+			this.error = null;
+			this.loading = false;
+		},
+
 		async getSnippets(token: string, titleSearch: string = "") {
 			this.loading = true;
 			this.error = null;

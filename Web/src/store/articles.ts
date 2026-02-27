@@ -16,6 +16,12 @@ export const useArticleStore = defineStore("articles", {
 		error: null as string | null,
 	}),
 	actions: {
+		resetArticlesState() {
+			this.articles = [];
+			this.error = null;
+			this.loading = false;
+		},
+
 		async getArticles(titleSearch: string = "", token: string = "") {
 			this.loading = true;
 			this.error = null;

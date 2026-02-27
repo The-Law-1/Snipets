@@ -1,4 +1,7 @@
 import { defineStore } from "pinia";
+import { useSnippetsStore } from "./snippets";
+import { useFeedStore } from "./feed";
+import { useArticleStore } from "./articles";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -22,6 +25,16 @@ export const useAuthStore = defineStore("auth", {
 		},
 	},
 	actions: {
+		resetUserScopedStores() {
+			const snippetsStore = useSnippetsStore();
+			const feedStore = useFeedStore();
+			const articleStore = useArticleStore();
+
+			snippetsStore.resetSnippetsState();
+			feedStore.resetFeedState();
+			articleStore.resetArticlesState();
+		},
+
 		async signUp(email: string, password: string) {
 			this.loading = true;
 			this.error = null;
@@ -56,6 +69,7 @@ export const useAuthStore = defineStore("auth", {
 		async signIn(email: string, password: string) {
 			this.loading = true;
 			this.error = null;
+			this.resetUserScopedStores();
 			try {
 				const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
 					method: "POST",
@@ -91,6 +105,7 @@ export const useAuthStore = defineStore("auth", {
 			try {
 				this.user = null;
 				this.session = null;
+				this.resetUserScopedStores();
 				localStorage.removeItem("auth_token");
 			} finally {
 				this.loading = false;
@@ -110,6 +125,9 @@ export const useAuthStore = defineStore("auth", {
 				});
 
 				if (!response.ok) {
+					this.resetUserScopedStores();
+					this.user = null;
+					this.session = null;
 					localStorage.removeItem("auth_token");
 					return false;
 				}
@@ -119,6 +137,9 @@ export const useAuthStore = defineStore("auth", {
 				this.session = { access_token: token };
 				return true;
 			} catch {
+				this.resetUserScopedStores();
+				this.user = null;
+				this.session = null;
 				localStorage.removeItem("auth_token");
 				return false;
 			}

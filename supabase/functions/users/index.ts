@@ -155,18 +155,33 @@ Deno.serve(async (request: Request) => {
 				);
 			}
 
-			const { error: deleteError } = await client
+			const { data: deletedRows, error: deleteError } = await client
 				.from("follows")
 				.delete()
 				.eq("follower_id", user.id)
-				.eq("following_id", targetUser.id);
+				.eq("following_id", targetUser.id)
+				.select("id");
 
 			if (deleteError) {
 				throw { status: 400, message: deleteError.message };
 			}
 
+			const deletedCount = deletedRows?.length || 0;
+			if (deletedCount === 0) {
+				return jsonResponse(
+					{
+						success: false,
+						message: "Unfollow had no effect",
+						detail:
+							"No follow row was deleted. This usually means no matching row exists or RLS prevented deletion.",
+					},
+					409,
+					corsHeaders,
+				);
+			}
+
 			return jsonResponse(
-				{ success: true, message: `Unfollowed ${username}` },
+				{ success: true, message: `Unfollowed ${username}`, deleted_count: deletedCount },
 				200,
 				corsHeaders,
 			);

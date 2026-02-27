@@ -26,7 +26,6 @@ Deno.serve(async (request) => {
 				query = query.ilike("title", `%${title}%`);
 			}
 			const { data, error } = await query;
-			console.log("Fetched snippets:", { data, error });
 			if (error) {
 				throw { status: 400, message: error.message };
 			}

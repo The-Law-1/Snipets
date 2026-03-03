@@ -10,9 +10,9 @@ const signInButton = byId<HTMLButtonElement>("signIn");
 const statusSpan = byId<HTMLSpanElement>("status");
 const authSection = byId<HTMLDivElement>("authSection");
 
-const SUPABASE_URL = "https://lsnbxwsivlwbpdxjhyma.supabase.co"
-const SUPABASE_ANON_KEY = "sb_publishable_-aycBC_FDZAmZFwt-a0uJw_nfOd5Tdb"
-const EDGE_URL = "https://lsnbxwsivlwbpdxjhyma.supabase.co/functions/v1";
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const EDGE_URL = process.env.EDGE_URL;
 
 // Sign in to Supabase and store JWT
 signInButton.addEventListener("click", async () => {

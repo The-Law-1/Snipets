@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"build": "for file in src/*.ts; do esbuild \"$file\" --bundle --platform=browser --outfile=dist/$(basename \"$file\" .ts).js; done",
+		"build": "bash ./scripts/build.sh",
 		"clean": "rimraf dist",
 		"prettier": "prettier --write ."
 	},

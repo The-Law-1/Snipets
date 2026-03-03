@@ -71,14 +71,19 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 	try {
 		const res = await sendSelectedText(selected, pageUrl, pageTitle);
 		if (!res.ok) {
-			const text = await res.text();
-			console.error("API error", res.status, text);
-			await notify(`API error: ${res.status} ${res.statusText}`, text.slice(0, 120) || undefined);
+			if (res.status === 401) {
+				const optionsUrl = chrome.runtime.getURL("options.html");
+				await notify("Unauthorized", "Invalid or expired token, opening login page in 4 seconds. If options are not opened, follow this link: " + optionsUrl);
+				setTimeout(async () => {
+					await chrome.runtime.openOptionsPage();
+				}, 4000);
+				return;
+			}
+			await notify("API Error:", `${res.status} ${res.statusText}`);
 		} else {
 			await notify("Saved ✓", `Snippet saved to Snipets!`);
 		}
 	} catch (err: any) {
-		console.error(err);
 		await notify("Failed to save", err?.message || String(err));
 	}
 });

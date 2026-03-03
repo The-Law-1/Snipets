@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { getValidAccessToken } from "../gateways/auth";
 
 const EDGE_URL = import.meta.env.VITE_EDGE_URL;
 const BASE_URL = EDGE_URL;
@@ -29,9 +30,14 @@ export const useSnippetsStore = defineStore("snippets", {
 			this.loading = true;
 			this.error = null;
 			try {
+				const validToken = await getValidAccessToken(token);
+				if (!validToken) {
+					throw new Error("Unauthorized. Please sign in again.");
+				}
+
 				const res = await fetch(`${BASE_URL}/snippets?title=${titleSearch}`, {
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${validToken}`,
 					},
 				});
 				const json = await res.json();
@@ -53,11 +59,16 @@ export const useSnippetsStore = defineStore("snippets", {
 			this.loading = true;
 			this.error = null;
 			try {
+				const validToken = await getValidAccessToken(token);
+				if (!validToken) {
+					throw new Error("Unauthorized. Please sign in again.");
+				}
+
 				const res = await fetch(`${BASE_URL}/snippets`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${validToken}`,
 					},
 					body: JSON.stringify(snippet),
 				});
@@ -80,11 +91,16 @@ export const useSnippetsStore = defineStore("snippets", {
 			this.loading = true;
 			this.error = null;
 			try {
+				const validToken = await getValidAccessToken(token);
+				if (!validToken) {
+					throw new Error("Unauthorized. Please sign in again.");
+				}
+
 				const encodedId = encodeURIComponent(id);
 				const res = await fetch(`${BASE_URL}/snippets/${encodedId}`, {
 					method: "DELETE",
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${validToken}`,
 					},
 				});
 				if (!res.ok) {

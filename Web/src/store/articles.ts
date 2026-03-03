@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { getValidAccessToken } from "../gateways/auth";
 
 const EDGE_URL = import.meta.env.VITE_EDGE_URL;
 const BASE_URL = EDGE_URL;
@@ -26,9 +27,14 @@ export const useArticleStore = defineStore("articles", {
 			this.loading = true;
 			this.error = null;
 			try {
+				const validToken = await getValidAccessToken(token);
+				if (!validToken) {
+					throw new Error("Unauthorized. Please sign in again.");
+				}
+
 				const headers: Record<string, string> = {};
-				if (token) {
-					headers["Authorization"] = `Bearer ${token}`;
+				if (validToken) {
+					headers["Authorization"] = `Bearer ${validToken}`;
 				}
 
 				const res = await fetch(`${BASE_URL}/articles?title=${titleSearch}`, {

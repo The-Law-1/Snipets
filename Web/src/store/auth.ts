@@ -58,6 +58,8 @@ export const useAuthStore = defineStore("auth", {
 				// you'll need to change this flow
 				this.user = data.user;
 				localStorage.setItem("auth_token", data.access_token);
+				localStorage.setItem("refresh_token", data.refresh_token);
+				localStorage.setItem("expires_at", data.expires_at);
 			} catch (err: any) {
 				this.error = err.message || "Sign up failed";
 				throw err;
@@ -65,7 +67,37 @@ export const useAuthStore = defineStore("auth", {
 				this.loading = false;
 			}
 		},
+		async refreshToken() {
+			const refreshToken = localStorage.getItem("refresh_token");
+			if (!refreshToken) {
+				this.signOut();
+				return;
+			}
 
+			try {
+				const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						apikey: SUPABASE_ANON_KEY,
+					},
+					body: JSON.stringify({ refresh_token: refreshToken }),
+				});
+
+				if (!response.ok) {
+					this.signOut();
+					return;
+				}
+
+				const data = await response.json();
+				this.session = { access_token: data.access_token };
+				localStorage.setItem("auth_token", data.access_token);
+				localStorage.setItem("refresh_token", data.refresh_token);
+				localStorage.setItem("expires_at", data.expires_at);
+			} catch {
+				this.signOut();
+			}
+		},
 		async signIn(email: string, password: string) {
 			this.loading = true;
 			this.error = null;
@@ -89,9 +121,13 @@ export const useAuthStore = defineStore("auth", {
 				}
 
 				const data = await response.json();
+				console.log("Sign in response:", data);
+
 				this.session = { access_token: data.access_token };
 				this.user = { id: data.user?.id, email: data.user?.email };
 				localStorage.setItem("auth_token", data.access_token);
+				localStorage.setItem("refresh_token", data.refresh_token);
+				localStorage.setItem("expires_at", data.expires_at);
 			} catch (err: any) {
 				this.error = err.message || "Sign in failed";
 				throw err;

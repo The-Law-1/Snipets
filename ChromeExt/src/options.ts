@@ -12,7 +12,6 @@ const authSection = byId<HTMLDivElement>("authSection");
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
-const EDGE_URL = process.env.EDGE_URL;
 
 // Sign in to Supabase and store JWT
 signInButton.addEventListener("click", async () => {
@@ -52,7 +51,7 @@ signInButton.addEventListener("click", async () => {
 		const token = data.access_token;
 
 		chrome.storage.sync.set(
-			{ apiKey: token, endpoint: EDGE_URL },
+			{ apiKey: token },
 			() => {
 				statusSpan.textContent = "Signed in successfully! Select some text then right-click to save it.";
 				//authSection.style.display = "none";

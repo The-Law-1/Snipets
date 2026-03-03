@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { getValidAccessToken } from "../gateways/auth";
 
 const EDGE_URL = import.meta.env.VITE_EDGE_URL;
 const BASE_URL = EDGE_URL;
@@ -31,9 +32,14 @@ export const useFeedStore = defineStore("feed", {
 			this.loading = true;
 			this.error = null;
 			try {
+				const validToken = await getValidAccessToken(token);
+				if (!validToken) {
+					throw new Error("Unauthorized. Please sign in again.");
+				}
+
 				const res = await fetch(`${BASE_URL}/feed`, {
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${validToken}`,
 					},
 				});
 

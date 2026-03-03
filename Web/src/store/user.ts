@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { getValidAccessToken } from "../gateways/auth";
 
 const EDGE_URL = import.meta.env.VITE_EDGE_URL;
 const BASE_URL = EDGE_URL;
@@ -23,11 +24,16 @@ export const useUserStore = defineStore("user", {
 			this.loading = true;
 			this.error = null;
 			try {
+				const validToken = await getValidAccessToken(token);
+				if (!validToken) {
+					throw new Error("Unauthorized. Please sign in again.");
+				}
+
 				const res = await fetch(`${BASE_URL}/auth/`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${validToken}`,
 					},
 					body: JSON.stringify({ username }),
 				});
@@ -55,9 +61,14 @@ export const useUserStore = defineStore("user", {
 			this.loading = true;
 			this.error = null;
 			try {
+				const validToken = await getValidAccessToken(token);
+				if (!validToken) {
+					throw new Error("Unauthorized. Please sign in again.");
+				}
+
 				const headers: Record<string, string> = {};
-				if (token) {
-					headers.Authorization = `Bearer ${token}`;
+				if (validToken) {
+					headers.Authorization = `Bearer ${validToken}`;
 				}
 
 				const res = await fetch(`${BASE_URL}/users?q=${encodeURIComponent(query)}`, { headers });
@@ -81,10 +92,15 @@ export const useUserStore = defineStore("user", {
 			this.loading = true;
 			this.error = null;
 			try {
+				const validToken = await getValidAccessToken(token);
+				if (!validToken) {
+					throw new Error("Unauthorized. Please sign in again.");
+				}
+
 				const res = await fetch(`${BASE_URL}/users?username=${encodeURIComponent(username)}`, {
 					method: "POST",
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${validToken}`,
 					},
 				});
 
@@ -108,10 +124,15 @@ export const useUserStore = defineStore("user", {
 			this.loading = true;
 			this.error = null;
 			try {
+				const validToken = await getValidAccessToken(token);
+				if (!validToken) {
+					throw new Error("Unauthorized. Please sign in again.");
+				}
+
 				const res = await fetch(`${BASE_URL}/users?username=${encodeURIComponent(username)}`, {
 					method: "DELETE",
 					headers: {
-						Authorization: `Bearer ${token}`,
+						Authorization: `Bearer ${validToken}`,
 					},
 				});
 

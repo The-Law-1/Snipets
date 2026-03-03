@@ -15,9 +15,21 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Helper to read settings from storage
 async function getSettings(): Promise<Settings> {
+	const endpoint = process.env.EDGE_URL;
+	if (!endpoint) {
+		throw new Error("No API endpoint configured. Please set EDGE_URL in your environment variables.");
+	}
+
+	// try to read apiKey from localStorage
+	const storageResult = await chrome.storage.local.get("auth_token")
+	const apiKey = storageResult.auth_token;
+	if (apiKey) {
+		return { endpoint, apiKey };
+	}
+
 	return new Promise((resolve) => {
-		chrome.storage.sync.get(["endpoint", "apiKey"], (items) => {
-			resolve({ endpoint: items.endpoint, apiKey: items.apiKey });
+		chrome.storage.sync.get(["apiKey"], (items) => {
+			resolve({ endpoint: endpoint, apiKey: items.apiKey });
 		});
 	});
 }

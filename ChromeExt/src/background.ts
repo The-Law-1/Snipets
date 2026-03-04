@@ -1,3 +1,5 @@
+import { getValidAuthToken } from "./refresh";
+
 const MENU_ID = "send-selected-text" as const;
 
 type Settings = {
@@ -20,18 +22,8 @@ async function getSettings(): Promise<Settings> {
 		throw new Error("No API endpoint configured. Please set EDGE_URL in your environment variables.");
 	}
 
-	// try to read apiKey from localStorage
-	const storageResult = await chrome.storage.local.get("auth_token")
-	const apiKey = storageResult.auth_token;
-	if (apiKey) {
-		return { endpoint, apiKey };
-	}
-
-	return new Promise((resolve) => {
-		chrome.storage.sync.get(["apiKey"], (items) => {
-			resolve({ endpoint: endpoint, apiKey: items.apiKey });
-		});
-	});
+	const apiKey = await getValidAuthToken();
+	return { endpoint, apiKey };
 }
 
 // Send the selected text to your API

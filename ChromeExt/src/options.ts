@@ -27,6 +27,10 @@ signInButton.addEventListener("click", async () => {
 	statusSpan.textContent = "Signing in...";
 
 	try {
+		if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+			throw new Error("Missing SUPABASE_URL or SUPABASE_ANON_KEY in build environment.");
+		}
+
 		// For now, we'll use the API to get auth token via the web frontend
 		// In production, you'd use Supabase Auth directly or get token from web session
 		const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
@@ -49,15 +53,26 @@ signInButton.addEventListener("click", async () => {
 
 		const data = await response.json();
 		const token = data.access_token;
+		const refreshToken = data.refresh_token;
+		const expiresAt =
+			typeof data.expires_at === "number"
+				? data.expires_at
+				: typeof data.expires_in === "number"
+					? Math.floor(Date.now() / 1000) + data.expires_in
+					: undefined;
 
-		chrome.storage.sync.set(
-			{ apiKey: token },
-			() => {
-				statusSpan.textContent = "Signed in successfully! Select some text then right-click to save it.";
-				//authSection.style.display = "none";
-				//setTimeout(() => (statusSpan.textContent = ""), 2000);
-			}
-		);
+		await chrome.storage.local.set({
+			auth_token: token,
+			apiKey: token,
+			refresh_token: refreshToken,
+			expires_at: expiresAt,
+		});
+
+		await chrome.storage.sync.set({ apiKey: token });
+
+		statusSpan.textContent = "Signed in successfully! Select some text then right-click to save it.";
+		//authSection.style.display = "none";
+		//setTimeout(() => (statusSpan.textContent = ""), 2000);
 	} catch (err: any) {
 		statusSpan.textContent = `Sign in failed: ${err.message}`;
 	} finally {

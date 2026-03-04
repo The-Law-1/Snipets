@@ -37,6 +37,8 @@ export async function refreshAccessToken(): Promise<string | null> {
 			return null;
 		}
 
+		console.log("Token refreshed successfully from web app!");
+
 		const data = await response.json();
 		const accessToken: string | undefined = data.access_token;
 		if (!accessToken) {
@@ -76,7 +78,10 @@ export async function getValidAccessToken(token?: string): Promise<string | null
 	const expiresAt = readExpiresAt();
 
 	if (expiresAt !== null && expiresAt <= now) {
+		console.log("[WEB APP] Access token expired, attempting to refresh...");
 		return await refreshAccessToken();
+	} else {
+		console.log("[WEB APP] Access token is valid, no need to refresh.");
 	}
 
 	return token || localStorage.getItem("auth_token");

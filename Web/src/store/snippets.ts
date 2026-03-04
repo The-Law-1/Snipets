@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { getValidAccessToken } from "../gateways/auth";
+import { getValidAccessToken } from "../gateways/refresh";
 
 const EDGE_URL = import.meta.env.VITE_EDGE_URL;
 const BASE_URL = EDGE_URL;

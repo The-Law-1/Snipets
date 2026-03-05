@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { useSnippetsStore } from "./snippets";
 import { useFeedStore } from "./feed";
 import { useArticleStore } from "./articles";
+import { getValidAccessToken } from "../gateways/refresh";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -149,7 +150,7 @@ export const useAuthStore = defineStore("auth", {
 		},
 
 		async restoreSession() {
-			const token = localStorage.getItem("auth_token");
+			const token = await getValidAccessToken();
 			if (!token) return false;
 
 			try {

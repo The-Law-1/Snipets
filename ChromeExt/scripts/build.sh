@@ -33,7 +33,16 @@ supabase_anon_key_escaped="$(escape_js_string "$SUPABASE_ANON_KEY")"
 edge_url_escaped="$(escape_js_string "$EDGE_URL")"
 snippets_web_app_url_escaped="$(escape_js_string "$SNIPPETS_WEB_APP_URL")"
 
+ignore_files=(
+	"env.d.ts",
+	"types.ts"
+)
+
 for file in src/*.ts; do
+	if [[ " ${ignore_files[*]} " == *" $(basename "$file") "* ]]; then
+		echo "Skipping $file (in ignore list)"
+		continue
+	fi
 	outfile="dist/$(basename "$file" .ts).js"
 	npx esbuild "$file" \
 		--bundle \

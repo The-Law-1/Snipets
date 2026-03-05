@@ -1,4 +1,5 @@
 import { getValidAuthToken } from "./refresh";
+import { APITokenError } from "./types";
 
 const MENU_ID = "send-selected-text" as const;
 
@@ -31,11 +32,11 @@ async function sendSelectedText(text: string, pageUrl?: string, pageTitle?: stri
 	const { endpoint, apiKey } = await getSettings();
 
 	if (!endpoint) {
-		throw new Error("No endpoint configured. Open the extension Options and set an API endpoint.");
+		throw new Error("No endpoint configured. Strange error should not happen as it's configured by developer.");
 	}
 
 	if (!apiKey) {
-		throw new Error("No API key configured. Please sign in from the Options page.");
+		throw new APITokenError("No API key saved. Please click on extension icon to create account or sign in.");
 	}
 
 	// Payload now includes URL and title
@@ -59,6 +60,14 @@ async function sendSelectedText(text: string, pageUrl?: string, pageTitle?: stri
 	});
 }
 
+async function openSignInPopup() {
+	const popupUrl = chrome.runtime.getURL("popup.html");
+	await notify("Unauthorized", "Invalid or expired token, opening login page in 4 seconds. If popup is blocked, follow this link: " + popupUrl);
+	setTimeout(async () => {
+		await chrome.tabs.create({ url: popupUrl });
+	}, 4000);
+}
+
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 	if (info.menuItemId !== MENU_ID) return;
@@ -76,11 +85,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 		const res = await sendSelectedText(selected, pageUrl, pageTitle);
 		if (!res.ok) {
 			if (res.status === 401) {
-				const popupUrl = chrome.runtime.getURL("popup.html");
-				await notify("Unauthorized", "Invalid or expired token, opening login page in 4 seconds. If popup is blocked, follow this link: " + popupUrl);
-				setTimeout(async () => {
-					await chrome.tabs.create({ url: popupUrl });
-				}, 4000);
+				openSignInPopup();
 				return;
 			}
 			await notify("API Error:", `${res.status} ${res.statusText}`);
@@ -88,6 +93,11 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 			await notify("Saved ✓", `Snippet saved to Snipets!`);
 		}
 	} catch (err: any) {
+		// if error a certain type APIKeyError e.g. token expired, then open popup to let user sign in again
+		if (err instanceof APITokenError) {
+			openSignInPopup();
+			return;
+		}
 		await notify("Failed to save", err?.message || String(err));
 	}
 });

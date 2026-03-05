@@ -69,6 +69,8 @@ function showReadyUi(email?: string): void {
 		? `You're all set, ${email}.`
 		: "You're all set. Credentials are available in this session.";
 
+	readyMessage.textContent += " Select some text on any webpage, right-click, and choose 'Save snippet to Snipets' to save it to your account.";
+
 	if (SNIPPETS_WEB_APP_URL) {
 		webAppLink.href = SNIPPETS_WEB_APP_URL;
 		webAppLink.textContent = SNIPPETS_WEB_APP_URL;
@@ -122,7 +124,7 @@ async function signIn(email: string, password: string): Promise<void> {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			apikey: SUPABASE_ANON_KEY,
+			apikey: SUPABASE_ANON_KEY!,
 		},
 		body: JSON.stringify({ email, password }),
 	});
@@ -150,12 +152,15 @@ async function signUp(email: string, password: string): Promise<void> {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
-			apikey: SUPABASE_ANON_KEY,
+			apikey: SUPABASE_ANON_KEY!,
 		},
 		body: JSON.stringify({ email, password }),
 	});
 
 	if (!response.ok) {
+		if (response.status === 400) {
+			throw new Error("Invalid email or password. Password should be at least 6 characters. And email should be valid format.");
+		}
 		const data = (await response.json().catch(() => ({}))) as Record<string, string>;
 		throw new Error(data.message || data.error_description || "Sign up failed");
 	}

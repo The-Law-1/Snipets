@@ -1,7 +1,10 @@
+import { setupBackgroundMessageListeners } from "./backgroundMessageListeners";
 import { getValidAuthToken } from "./refresh";
 import { APITokenError, MessageType } from "./types";
 
 const MENU_ID = "send-selected-text" as const;
+
+setupBackgroundMessageListeners();
 
 type Settings = {
 	endpoint?: string;
@@ -20,7 +23,12 @@ chrome.runtime.onInstalled.addListener(() => {
 async function getSettings(): Promise<Settings> {
 	const endpoint = process.env.EDGE_URL;
 	if (!endpoint) {
-		throw new Error("No API endpoint configured. Please set EDGE_URL in your environment variables.");
+		throw new Error("No API endpoint configured. Developer messed up his build.");
+	}
+
+	const snippetsWebAppUrl = process.env.SNIPPETS_WEB_APP_URL;
+	if (!snippetsWebAppUrl) {
+		throw new Error("No Snippets web app URL configured. Developer messed up his build.");
 	}
 
 	const apiKey = await getValidAuthToken();
@@ -61,15 +69,8 @@ async function sendSelectedText(text: string, pageUrl?: string, pageTitle?: stri
 }
 
 async function openSignInPopup() {
-	await notify("Unauthorized", "Invalid or expired token, click this pop-up to sign in again.", MessageType.LOGIN_REQUIRED);
+	await notify("Unauthorized", "Invalid or expired token, click this pop-up to sign in or create your account.", MessageType.LOGIN_REQUIRED);
 }
-
-chrome.runtime.onMessage.addListener((msg) => {
-	if (msg?.type === MessageType.OPEN_LOGIN_PAGE) {
-		const popupUrl = chrome.runtime.getURL("popup.html");
-		chrome.tabs.create({ url: popupUrl });
-	}
-});
 
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -93,7 +94,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 			}
 			await notify("API Error:", `${res.status} ${res.statusText}`);
 		} else {
-			await notify("Saved ✓", `Snippet saved to Snipets!`);
+			await notify("Saved ✓", `Snippet saved to Snipets!\nClick this notification to view.`, MessageType.OPEN_WEB_APP);
 		}
 	} catch (err: any) {
 		// if error a certain type APIKeyError e.g. token expired, then open popup to let user sign in again

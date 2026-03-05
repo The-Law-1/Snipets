@@ -58,6 +58,30 @@ export function showToast(message: string, onClick?: () => void) {
         toast.style.cursor = "pointer";
     }
 
+    function closeToast(toastElement: HTMLDivElement) {
+        toastElement.style.opacity = "0";
+        toastElement.style.transform = "translateY(-6px)";
+        setTimeout(() => toastElement.remove(), TOAST_ANIMATION_MS);
+    }
+
+    // add an X button to the right hand side, which when clicked will remove the toast immediately
+    const closeButton = document.createElement("span");
+    closeButton.textContent = "x";
+    Object.assign(closeButton.style, {
+        position: "absolute",
+        top: "4px",
+        right: "8px",
+        fontSize: "16px",
+        cursor: "pointer",
+        color: "#f8fafc",
+    });
+    closeButton.addEventListener("click", (e: MouseEvent) => {
+        e.stopPropagation();
+        e.preventDefault();
+        closeToast(toast);
+    });
+    toast.appendChild(closeButton);
+
 	const progressBar = document.createElement("div");
 	Object.assign(progressBar.style, {
 		position: "absolute",
@@ -80,16 +104,12 @@ export function showToast(message: string, onClick?: () => void) {
 	});
 
 	const timeoutId = setTimeout(() => {
-		toast.style.opacity = "0";
-		toast.style.transform = "translateY(-6px)";
-		setTimeout(() => toast.remove(), TOAST_ANIMATION_MS);
+		closeToast(toast);
 	}, TOAST_DURATION_MS);
 
 	toast.addEventListener("click", () => {
         onClick?.();
-		toast.style.opacity = "0";
-		toast.style.transform = "translateY(-6px)";
+		closeToast(toast);
 		clearTimeout(timeoutId);
-		setTimeout(() => toast.remove(), TOAST_ANIMATION_MS);
 	});
 }

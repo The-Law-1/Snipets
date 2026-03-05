@@ -6,7 +6,16 @@ function openLoginPage() {
 	chrome.runtime.sendMessage({ type: MessageType.OPEN_LOGIN_PAGE });
 }
 
+function openWebApp() {
+	chrome.runtime.sendMessage({ type: MessageType.OPEN_WEB_APP });
+}
+
 chrome.runtime.onMessage.addListener((msg) => {
+
+	if (msg.type === MessageType.OPEN_WEB_APP) {
+		showToast(msg.message, openWebApp);
+	}
+
 	if (msg.type === MessageType.LOGIN_REQUIRED) {
 		showToast(msg.message, openLoginPage);
 	}

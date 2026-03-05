@@ -10,7 +10,7 @@ if [[ -f ".env" ]]; then
 	set +a
 fi
 
-required_vars=(SUPABASE_URL SUPABASE_ANON_KEY EDGE_URL)
+required_vars=(SUPABASE_URL SUPABASE_ANON_KEY EDGE_URL SNIPPETS_WEB_APP_URL)
 for var_name in "${required_vars[@]}"; do
 	if [[ -z "${!var_name:-}" ]]; then
 		echo "Missing required env var: ${var_name}" >&2
@@ -31,6 +31,7 @@ escape_js_string() {
 supabase_url_escaped="$(escape_js_string "$SUPABASE_URL")"
 supabase_anon_key_escaped="$(escape_js_string "$SUPABASE_ANON_KEY")"
 edge_url_escaped="$(escape_js_string "$EDGE_URL")"
+snippets_web_app_url_escaped="$(escape_js_string "$SNIPPETS_WEB_APP_URL")"
 
 for file in src/*.ts; do
 	outfile="dist/$(basename "$file" .ts).js"
@@ -40,7 +41,8 @@ for file in src/*.ts; do
 		--outfile="$outfile" \
 		--define:process.env.SUPABASE_URL=\"$supabase_url_escaped\" \
 		--define:process.env.SUPABASE_ANON_KEY=\"$supabase_anon_key_escaped\" \
-		--define:process.env.EDGE_URL=\"$edge_url_escaped\"
+		--define:process.env.EDGE_URL=\"$edge_url_escaped\" \
+		--define:process.env.SNIPPETS_WEB_APP_URL=\"$snippets_web_app_url_escaped\"
 done
 
 echo "Build complete: env vars injected at build time."

@@ -76,10 +76,10 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 		const res = await sendSelectedText(selected, pageUrl, pageTitle);
 		if (!res.ok) {
 			if (res.status === 401) {
-				const optionsUrl = chrome.runtime.getURL("options.html");
-				await notify("Unauthorized", "Invalid or expired token, opening login page in 4 seconds. If options are not opened, follow this link: " + optionsUrl);
+				const popupUrl = chrome.runtime.getURL("popup.html");
+				await notify("Unauthorized", "Invalid or expired token, opening login page in 4 seconds. If popup is blocked, follow this link: " + popupUrl);
 				setTimeout(async () => {
-					await chrome.runtime.openOptionsPage();
+					await chrome.tabs.create({ url: popupUrl });
 				}, 4000);
 				return;
 			}

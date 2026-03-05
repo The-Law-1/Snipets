@@ -3,5 +3,6 @@ declare const process: {
 		SUPABASE_URL?: string;
 		SUPABASE_ANON_KEY?: string;
 		EDGE_URL?: string;
+		SNIPPETS_WEB_APP_URL?: string;
 	};
 };

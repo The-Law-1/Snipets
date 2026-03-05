@@ -3,10 +3,11 @@ const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
 type StoredAuth = {
 	auth_token?: string;
-	apiKey?: string;
 	refresh_token?: string;
 	expires_at?: number | string;
 };
+
+const SESSION_KEYS = ["auth_token", "refresh_token", "expires_at", "auth_email", "auth_password"] as const;
 
 function parseExpiresAt(value: unknown): number | null {
 	if (typeof value === "number" && Number.isFinite(value)) return value;
@@ -18,29 +19,19 @@ function parseExpiresAt(value: unknown): number | null {
 }
 
 async function clearStoredAuth(): Promise<void> {
-	await chrome.storage.local.remove(["auth_token", "apiKey", "refresh_token", "expires_at"]);
-	await chrome.storage.sync.remove(["apiKey"]);
+	await chrome.storage.session.remove([...SESSION_KEYS]);
 }
 
 export async function getValidAuthToken(): Promise<string | undefined> {
-	const local = (await chrome.storage.local.get([
+	const session = (await chrome.storage.session.get([
 		"auth_token",
-		"apiKey",
 		"refresh_token",
 		"expires_at",
 	])) as StoredAuth;
 
-	let accessToken = local.auth_token || local.apiKey;
-	let refreshToken = local.refresh_token;
-	let expiresAt = parseExpiresAt(local.expires_at);
-
-	if (!accessToken) {
-		const sync = (await chrome.storage.sync.get(["apiKey"])) as StoredAuth;
-		if (sync.apiKey) {
-			accessToken = sync.apiKey;
-			await chrome.storage.local.set({ auth_token: sync.apiKey, apiKey: sync.apiKey });
-		}
-	}
+	const accessToken = session.auth_token;
+	const refreshToken = session.refresh_token;
+	const expiresAt = parseExpiresAt(session.expires_at);
 
 	if (!accessToken) return undefined;
 
@@ -93,15 +84,13 @@ export async function getValidAuthToken(): Promise<string | undefined> {
 
 		const payload: Record<string, string | number> = {
 			auth_token: nextAccessToken,
-			apiKey: nextAccessToken,
 			refresh_token: nextRefreshToken,
 		};
 		if (nextExpiresAt !== null) {
 			payload.expires_at = nextExpiresAt;
 		}
 
-		await chrome.storage.local.set(payload);
-		await chrome.storage.sync.set({ apiKey: nextAccessToken });
+		await chrome.storage.session.set(payload);
 
 		return nextAccessToken;
 	} catch {

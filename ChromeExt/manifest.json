@@ -14,5 +14,8 @@
 			"js": ["dist/contentScript.js"]
 		}
 	],
-	"options_page": "options.html"
+	"action": {
+		"default_title": "Snipets",
+		"default_popup": "popup.html"
+	}
 }

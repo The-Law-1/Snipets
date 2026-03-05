@@ -1,5 +1,5 @@
 import { getValidAuthToken } from "./refresh";
-import { APITokenError } from "./types";
+import { APITokenError, MessageType } from "./types";
 
 const MENU_ID = "send-selected-text" as const;
 
@@ -61,12 +61,15 @@ async function sendSelectedText(text: string, pageUrl?: string, pageTitle?: stri
 }
 
 async function openSignInPopup() {
-	const popupUrl = chrome.runtime.getURL("popup.html");
-	await notify("Unauthorized", "Invalid or expired token, opening login page in 4 seconds. If popup is blocked, follow this link: " + popupUrl);
-	setTimeout(async () => {
-		await chrome.tabs.create({ url: popupUrl });
-	}, 4000);
+	await notify("Unauthorized", "Invalid or expired token, click this pop-up to sign in again.", MessageType.LOGIN_REQUIRED);
 }
+
+chrome.runtime.onMessage.addListener((msg) => {
+	if (msg?.type === MessageType.OPEN_LOGIN_PAGE) {
+		const popupUrl = chrome.runtime.getURL("popup.html");
+		chrome.tabs.create({ url: popupUrl });
+	}
+});
 
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -103,11 +106,12 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 });
 
 // Simple user feedback via notification
-async function notify(title: string, message?: string) {
+async function notify(title: string, message?: string, type: MessageType = MessageType.SHOW_ALERT) {
+
 	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 		if (tabs[0]?.id) {
 			chrome.tabs.sendMessage(tabs[0].id, {
-				type: "SHOW_ALERT",
+				type: type,
 				message: `${title}\n${message || ""}`,
 			});
 		}

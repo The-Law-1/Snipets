@@ -3,3 +3,9 @@ export class APITokenError extends Error {
         super(message);
     }
 }
+
+export enum MessageType {
+    SHOW_ALERT = "SHOW_ALERT",
+    LOGIN_REQUIRED = "LOGIN_REQUIRED",
+    OPEN_LOGIN_PAGE = "OPEN_LOGIN_PAGE",
+}

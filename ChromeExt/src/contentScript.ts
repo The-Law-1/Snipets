@@ -3,7 +3,6 @@ import { MessageType } from "./types";
 
 
 function openLoginPage() {
-	console.log("Opening login page...");
 	chrome.runtime.sendMessage({ type: MessageType.OPEN_LOGIN_PAGE });
 }
 

@@ -58,7 +58,7 @@ Deno.serve(async (request) => {
 		// DELETE /snippets/:id - Delete snippet
 		if (request.method === "DELETE") {
 			const { client, user } = await requireUser(request);
-			const snippetId = decodeURIComponent(segments[0]);
+			const snippetId = decodeURIComponent(segments[1]);
 			const { data, error } = await client
 				.from("snippets")
 				.delete()

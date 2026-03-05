@@ -215,6 +215,20 @@ async function handleAuthAction(kind: "signin" | "signup"): Promise<void> {
 	}
 }
 
+passwordInput.addEventListener("keydown", (e) => {
+	if (e.key === "Enter") {
+		e.preventDefault();
+		signInButton.click();
+	}
+});
+
+confirmPasswordInput.addEventListener("keydown", (e) => {
+	if (e.key === "Enter") {
+		e.preventDefault();
+		signUpButton.click();
+	}
+});
+
 signInButton.addEventListener("click", async () => {
 	await handleAuthAction("signin");
 });

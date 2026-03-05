@@ -2,6 +2,12 @@ const TOAST_CONTAINER_ID = "snipets-toast-container";
 const TOAST_DURATION_MS = 5000;
 const TOAST_ANIMATION_MS = 180;
 
+function normalizeToastMessage(message: string) {
+	return message
+		.replace(/<br\s*\/?>/gi, "\n")
+		.replace(/\\n/g, "\n");
+}
+
 function getToastContainer() {
 	let container = document.getElementById(TOAST_CONTAINER_ID);
 	if (container) {
@@ -28,7 +34,7 @@ function getToastContainer() {
 export function showToast(message: string, onClick?: () => void) {
 	const container = getToastContainer();
 	const toast = document.createElement("div");
-	toast.textContent = message;
+	toast.textContent = normalizeToastMessage(message);
 	Object.assign(toast.style, {
 		position: "relative",
 		overflow: "hidden",
@@ -44,7 +50,8 @@ export function showToast(message: string, onClick?: () => void) {
 		transform: "translateY(-6px)",
 		transition: `opacity ${TOAST_ANIMATION_MS}ms ease, transform ${TOAST_ANIMATION_MS}ms ease`,
 		pointerEvents: "auto",
-        textAlign: "center",
+		textAlign: "center",
+		whiteSpace: "pre-line",
 	});
 
     if (onClick !== undefined) {

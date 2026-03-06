@@ -2,7 +2,12 @@ import { requireUser } from "./lib/auth.ts";
 import { getCorsHeaders, jsonResponse, parseJson } from "./lib/http.ts";
 
 Deno.serve(async (request) => {
-	const corsHeaders = getCorsHeaders(request);
+	let corsHeaders: HeadersInit = {};
+	try {
+		corsHeaders = getCorsHeaders(request);
+	} catch (error) {
+		return new Response("CORS error", { status: 403 });
+	}
 
 	if (request.method === "OPTIONS") {
 		return new Response(null, { status: 204, headers: corsHeaders });

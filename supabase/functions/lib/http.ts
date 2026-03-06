@@ -3,6 +3,10 @@ export function getCorsHeaders(request: Request): HeadersInit {
 	const allowed = configured.split(",").map((value) => value.trim()).filter(Boolean);
 	const origin = request.headers.get("origin") || "";
 
+	if (origin === "" || !allowed.includes(origin)) {
+		throw new Error("Origin not allowed");
+	}
+
 	let allowOrigin = "*";
 	if (allowed.length > 0 && allowed[0] !== "*") {
 		allowOrigin = allowed.includes(origin) ? origin : allowed[0];

@@ -2,7 +2,12 @@ import { createSupabaseClient, requireUser, getBearerToken } from "./lib/auth.ts
 import { getCorsHeaders, jsonResponse } from "./lib/http.ts";
 
 Deno.serve(async (request: Request) => {
-	const corsHeaders = getCorsHeaders(request);
+	let corsHeaders: HeadersInit = {};
+	try {
+		corsHeaders = getCorsHeaders(request);
+	} catch (error) {
+		return new Response("CORS error", { status: 403 });
+	}
 
 	if (request.method === "OPTIONS") {
 		return new Response(null, { status: 204, headers: corsHeaders });

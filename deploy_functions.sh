@@ -7,7 +7,7 @@ fi
 
 echo "Deploying function: $1..."
 
-set -a; source .env; set +a; npx supabase functions deploy $1 --project-ref ${SUPABASE_PROJECT_REF} --no-verify-jwt
+set -a; source .env; set +a; supabase functions deploy $1 --project-ref ${SUPABASE_PROJECT_REF} --no-verify-jwt
 
 if [ $? -ne 0 ]; then
   echo "Failed to deploy function $1"

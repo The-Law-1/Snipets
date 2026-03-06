@@ -1,1 +1,1 @@
-/home/gabriel/Perso/Projects/Snipets/supabase/functions/lib/http.ts
+../../lib/http.ts

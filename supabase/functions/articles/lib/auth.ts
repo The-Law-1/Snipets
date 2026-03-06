@@ -1,1 +1,1 @@
-/home/gabriel/Perso/Projects/Snipets/supabase/functions/lib/auth.ts
+../../lib/auth.ts

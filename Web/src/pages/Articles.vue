@@ -15,8 +15,8 @@
 				v-if="articles.length > 0"
 				class="grid gap-6 mt-6">
 				<ArticleCard
-					v-for="article in articles"
-					:key="article.id"
+					v-for="(article, idx) in articles"
+					:key="idx"
 					:article="article"
 					@expand="onExpandArticle" />
 			</div>

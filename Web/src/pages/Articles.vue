@@ -45,7 +45,7 @@ const onExpandArticle = async (articleTitle: string) => {
 	const token = authStore.getAuthToken();
 	if (token) {
 		await snippetsStore.getSnippets(token, articleTitle);
-		window.location.hash = "#/";
+		window.location.hash = "#/snippets";
 	}
 };
 

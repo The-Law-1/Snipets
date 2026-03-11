@@ -25,7 +25,7 @@ import { useAuthStore } from "@/store/auth";
 const authStore = useAuthStore();
 
 const paths = {
-	Snippets: "#/",
+	Snippets: "#/snippets",
 	Articles: "#/articles",
 	Feed: "#/feed",
 	Friends: "#/friends",

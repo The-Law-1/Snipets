@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
+import Landing from "./pages/Landing.vue";
 import Snippets from "./pages/snippets.vue";
 import Articles from "./pages/Articles.vue";
 import Auth from "./pages/Auth.vue";
@@ -11,7 +12,8 @@ const authStore = useAuthStore();
 const isInitialized = ref(false);
 
 const routes: any = {
-	"/": Snippets,
+	"/": Landing,
+	"/snippets": Snippets,
 	"/articles": Articles,
 	"/feed": Feed,
 	"/friends": Friends,
@@ -26,9 +28,10 @@ window.addEventListener("hashchange", () => {
 
 const currentView = computed(() => {
 	const path = currentPath.value.slice(1) || "/";
+	const protectedPaths = new Set(["/snippets", "/articles", "/feed", "/friends"]);
 
-	// Route to auth if not logged in
-	if (!authStore.isAuthenticated && path !== "/auth") {
+	// Route protected pages to auth if not logged in
+	if (!authStore.isAuthenticated && protectedPaths.has(path)) {
 		return Auth;
 	}
 
@@ -37,7 +40,7 @@ const currentView = computed(() => {
 		return Auth;
 	}
 
-	return routes[path] || Snippets;
+	return routes[path] || Landing;
 });
 
 onMounted(async () => {

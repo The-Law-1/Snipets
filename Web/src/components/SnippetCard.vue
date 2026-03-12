@@ -1,7 +1,7 @@
 <template>
 	<div class="card-panel shadow-sm flex flex-col gap-4">
 		<div class="flex items-center justify-between mb-2">
-			<h2 class="text-xl font-bold">{{ snippet.title }}</h2>
+			<h2 class="text-xl">{{ snippet.title }}</h2>
 			<div class="flex items-center gap-2">
 				<a
 					v-if="snippet.url"

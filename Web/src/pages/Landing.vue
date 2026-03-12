@@ -12,7 +12,7 @@
 						Snipets<span class="title-caret" aria-hidden="true"></span>
 					</h1>
 					<p class="hero-subtitle">
-						<span class="ink-highlight">Annotate</span> the web. Save sharp ideas. Share what matters.
+						<span class="ink-highlight">Annotate</span> the web.
 					</p>
 					<div class="hero-actions">
 						<a

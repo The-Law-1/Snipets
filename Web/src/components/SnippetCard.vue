@@ -25,7 +25,7 @@
 		</blockquote>
 
 		<div class="flex items-center justify-between mt-2">
-			<span v-if="snippet.created_at" class="text-muted text-xs">Added: {{ snippet.created_at }}</span>
+			<span v-if="snippet.created_at" class="text-muted text-xs">Added: {{ snippet.created_at.split("T")[0] }}</span>
 		</div>
 	</div>
 </template>

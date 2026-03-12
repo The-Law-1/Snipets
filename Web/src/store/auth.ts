@@ -103,7 +103,6 @@ export const useAuthStore = defineStore("auth", {
 			this.loading = true;
 			this.error = null;
 			this.resetUserScopedStores();
-			console.log("Supabase URL:", SUPABASE_URL);
 			try {
 				const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
 					method: "POST",
@@ -123,7 +122,6 @@ export const useAuthStore = defineStore("auth", {
 				}
 
 				const data = await response.json();
-				console.log("Sign in response:", data);
 
 				this.session = { access_token: data.access_token };
 				this.user = { id: data.user?.id, email: data.user?.email };

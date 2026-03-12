@@ -65,8 +65,6 @@ export async function getValidAuthToken(): Promise<string | undefined> {
 			return undefined;
 		}
 
-        console.log("Successfully refreshed token from extension!");
-
 		const data = await response.json();
 		const nextAccessToken = data.access_token as string | undefined;
 		const nextRefreshToken = (data.refresh_token as string | undefined) || refreshToken;

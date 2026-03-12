@@ -8,6 +8,15 @@ function normalizeToastMessage(message: string) {
 		.replace(/\\n/g, "\n");
 }
 
+const TOAST_THEME = {
+	background: "#1b3934",
+	text: "#f3eadc",
+	border: "rgba(214, 189, 152, 0.22)",
+	progress: "rgba(214, 189, 152, 0.6)",
+	close: "#dcc7a9",
+	hoverShadow: "0 8px 24px rgba(103, 125, 106, 0.35)",
+};
+
 function getToastContainer() {
 	let container = document.getElementById(TOAST_CONTAINER_ID);
 	if (container) {
@@ -38,14 +47,15 @@ export function showToast(message: string, onClick?: () => void) {
 	Object.assign(toast.style, {
 		position: "relative",
 		overflow: "hidden",
-		background: "#0f172a",
-		color: "#f8fafc",
+		background: TOAST_THEME.background,
+		color: TOAST_THEME.text,
+		border: `1px solid ${TOAST_THEME.border}`,
 		padding: "10px 14px",
 		borderRadius: "8px",
 		fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
 		fontSize: "14px",
 		lineHeight: "1.4",
-		boxShadow: "0 8px 24px rgba(0, 0, 0, 0.25)",
+		boxShadow: TOAST_THEME.hoverShadow,
 		opacity: "0",
 		transform: "translateY(-6px)",
 		transition: `opacity ${TOAST_ANIMATION_MS}ms ease, transform ${TOAST_ANIMATION_MS}ms ease`,
@@ -73,7 +83,7 @@ export function showToast(message: string, onClick?: () => void) {
         right: "8px",
         fontSize: "16px",
         cursor: "pointer",
-        color: "#f8fafc",
+		color: TOAST_THEME.close,
     });
     closeButton.addEventListener("click", (e: MouseEvent) => {
         e.stopPropagation();
@@ -89,7 +99,7 @@ export function showToast(message: string, onClick?: () => void) {
 		bottom: "0",
 		height: "3px",
 		width: "100%",
-		background: "rgba(248, 250, 252, 0.45)",
+		background: TOAST_THEME.progress,
 		transformOrigin: "left center",
 		transform: "scaleX(1)",
 		transition: `transform ${TOAST_DURATION_MS}ms linear`

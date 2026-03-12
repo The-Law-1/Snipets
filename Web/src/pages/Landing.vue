@@ -33,7 +33,7 @@
 				<div class="section-grid">
 					<h2>How it works</h2>
 					<p>
-						Snipets turns your browsing into a living notebook. Highlight ideas from any page, save
+						Start remembering important ideas. Highlight text from any page, save
 						them with context, and come back later with search, grouping, and social discovery.
 					</p>
 				</div>
@@ -45,54 +45,35 @@
 						<span class="step-number">01</span>
 						<h3>Install the extension</h3>
 						<p>
-							Use the Chrome extension to capture text directly while reading. One click to save; no
-							context switching.
+							Add the extension to chrome, select some text, right-click and save to your snippets library.
 						</p>
 					</article>
 					<article class="step-card">
 						<span class="step-number">02</span>
 						<h3>Create your account</h3>
 						<p>
-							Create an account to keep your annotations synced and private by default, across devices
-							and sessions.
+							Create an account with a simple email and password to privately store and sync your snippets.
 						</p>
 					</article>
 					<article class="step-card">
 						<span class="step-number">03</span>
 						<h3>Highlight and save snippets</h3>
 						<p>
-							Capture meaningful lines, keep source links, then revisit your snippets in a clean,
-							searchable interface.
+							Highlight snippets you like, group them, search them, review them.
 						</p>
 					</article>
 					<article class="step-card">
 						<span class="step-number">04</span>
-						<h3>Add friends</h3>
+						<h3>Add friends!</h3>
 						<p>
-							Follow people with great reading taste. Build a trusted circle of curators and thought
-							partners.
-						</p>
-					</article>
-					<article class="step-card">
-						<span class="step-number">05</span>
-						<h3>Discover their annotations</h3>
-						<p>
-							Open the feed to see what your friends highlighted, when they saved it, and which pages
-							sparked discussion.
-						</p>
-					</article>
-					<article class="step-card">
-						<span class="step-number">06</span>
-						<h3>Turn reading into action</h3>
-						<p>
-							Your best snippets become articles, references, and prompts for your next project.
+							Follow your friends, discover their highlights, and share effortlessly.
 						</p>
 					</article>
 				</div>
 			</section>
 
 			<section class="content-section final-cta" data-reveal>
-				<h2>Ready to annotate smarter?</h2>
+				<h2>Ready to start collecting?</h2>
 				<p>Start with the extension, then jump into your snippets workspace.</p>
 				<div class="hero-actions">
 					<a

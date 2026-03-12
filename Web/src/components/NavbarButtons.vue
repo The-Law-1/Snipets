@@ -12,7 +12,7 @@
 		</div>
 
 		<div class="flex gap-3 items-center">
-			<span v-if="userEmail" class="text-sm text-gray-400">{{ userEmail }}</span>
+			<span v-if="userEmail" class="text-sm user-email">{{ userEmail }}</span>
 			<button @click="logout" class="logout-btn">Logout</button>
 		</div>
 	</div>
@@ -46,44 +46,24 @@ function logout() {
 
 <style scoped>
 .logout-btn {
-	padding: 0.4rem 0.75rem;
+	padding: 0.4rem 0.82rem;
 	border-radius: 9999px;
-	background: #ff6b6b;
-	color: white;
-	border: none;
-	font-weight: 600;
+	background: linear-gradient(180deg, var(--danger-600), var(--danger-700));
+	color: var(--danger-ink);
+	border: 1px solid rgba(255, 107, 107, 0.36);
+	font-weight: 700;
 	cursor: pointer;
-	transition: all 0.2s ease;
+	transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.18s ease;
 }
 
 .logout-btn:hover {
-	background: #ff5a5a;
 	transform: translateY(-1px);
-	box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+	box-shadow: 0 8px 20px rgba(255, 74, 74, 0.2);
+	filter: saturate(1.05);
 }
 
-.nav-button {
-	display: inline-flex;
-	align-items: center;
-	padding: 0.4rem 0.75rem;
-	border-radius: 9999px;
-	background: transparent;
-	color: var(--text);
-	border: 1px solid rgba(255, 255, 255, 0.04);
-	font-weight: 600;
-	text-decoration: none;
-	transition: all 0.2s ease;
-}
-
-.nav-button--active {
-	background: linear-gradient(180deg, rgba(255, 122, 24, 0.95) 0%, rgba(255, 107, 0, 0.95) 100%);
-	color: #071018;
-	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-}
-
-.nav-button:not(.nav-button--active):hover {
-	background: rgba(255, 255, 255, 0.05);
-	cursor: pointer;
+.user-email {
+	color: var(--muted);
 }
 </style>
 

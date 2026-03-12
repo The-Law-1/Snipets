@@ -24,8 +24,9 @@ defineProps<{ title: string }>();
 	gap: 0.4rem;
 	padding: 0.45rem 0.9rem;
 	border-radius: 9999px;
-	background: rgba(255, 255, 255, 0.08);
-	color: #e6eef8;
+	background: rgba(214, 189, 152, 0.12);
+	color: var(--text);
+	border: 1px solid var(--border-soft);
 	text-decoration: none;
 	font-weight: 600;
 	transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
@@ -34,7 +35,7 @@ defineProps<{ title: string }>();
 
 .home-button:hover {
 	transform: translateY(-1px);
-	background: rgba(255, 255, 255, 0.12);
+	background: rgba(214, 189, 152, 0.2);
 	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 

@@ -1,5 +1,5 @@
 <template>
-	<div class="min-h-screen bg-gray-900 p-6 text-gray-100">
+	<div class="app-shell p-6">
 		<div class="max-w-2xl mx-auto">
 			<PageHeader title="Find People" />
 
@@ -9,20 +9,20 @@
 						v-model="searchQuery"
 						type="text"
 						placeholder="Search by username..."
-						class="flex-1 px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+						class="form-input flex-1"
 					/>
 					<button
 						type="submit"
-						class="px-6 py-2 bg-orange-500 text-black rounded-lg hover:bg-orange-600 cursor-pointer font-bold"
+						class="button-primary px-6"
 					>
 						Search
 					</button>
 				</div>
 			</form>
 
-			<div v-if="loading" class="text-center py-8 text-gray-400">Searching...</div>
-			<div v-if="error" class="text-center py-8 text-red-400">{{ error }}</div>
-			<div v-if="results.length === 0 && searched" class="text-center py-8 text-gray-400">
+			<div v-if="loading" class="text-center py-8 text-muted">Searching...</div>
+			<div v-if="error" class="text-center py-8 text-error">{{ error }}</div>
+			<div v-if="results.length === 0 && searched" class="text-center py-8 text-muted">
 				No users found
 			</div>
 
@@ -115,19 +115,19 @@ async function toggleFollow(user: SearchUserResult) {
 
 <style scoped>
 .user-card {
-	background: #0b1220;
+	background: var(--panel-2);
 	border-radius: 12px;
 	padding: 1.5rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border: 1px solid rgba(255, 255, 255, 0.05);
+	border: 1px solid var(--border-soft);
 	transition: all 0.2s ease;
 }
 
 .user-card:hover {
 	border-color: var(--accent);
-	box-shadow: 0 8px 24px rgba(255, 122, 24, 0.1);
+	box-shadow: 0 8px 24px rgba(103, 125, 106, 0.2);
 }
 
 .user-info {
@@ -144,21 +144,29 @@ async function toggleFollow(user: SearchUserResult) {
 .follow-btn {
 	padding: 0.6rem 1.2rem;
 	background: linear-gradient(180deg, var(--accent) 0%, var(--accent-600) 100%);
-	color: #0b0b0b;
-	border: none;
+	color: var(--accent-ink);
+	border: 1px solid var(--border-soft);
 	border-radius: 8px;
-	font-weight: 600;
+	font-weight: 700;
 	cursor: pointer;
 	transition: all 0.2s ease;
 }
 
 .follow-btn:hover:not(:disabled) {
 	transform: translateY(-2px);
-	box-shadow: 0 8px 20px rgba(255, 122, 24, 0.3);
+	box-shadow: 0 8px 20px rgba(103, 125, 106, 0.35);
 }
 
 .follow-btn:disabled {
 	opacity: 0.6;
 	cursor: not-allowed;
+}
+
+.text-muted {
+	color: var(--muted);
+}
+
+.text-error {
+	color: var(--danger);
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div class="card-panel shadow-md flex flex-col gap-4">
-		<h2 class="text-xl font-bold text-gray-100">{{ props.article.title }}</h2>
+		<h2 class="text-xl font-bold">{{ props.article.title }}</h2>
 		<div class="flex items-center gap-3">
 			<a
 				:href="props.article.url"
@@ -12,7 +12,7 @@
 
 			<button
 				@click="$emit('expand', props.article.title)"
-				class="px-3 py-1 rounded-full bg-gray-700 text-gray-100 cursor-pointer hover:bg-gray-600">
+				class="button-ghost rounded-full px-3 py-1">
 				Snippets: {{ props.article.snippet_count }}
 			</button>
 		</div>

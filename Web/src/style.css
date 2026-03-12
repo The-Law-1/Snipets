@@ -1,21 +1,61 @@
 @import "tailwindcss";
 
 :root {
-	--bg: #0f1724; /* dark slate */
-	--panel: #111827; /* dark panel */
-	--muted: #94a3b8; /* muted text */
-	--text: #e6eef8; /* main text */
-	--accent: #ff7a18; /* orange accent */
-	--accent-600: #ff6b00;
+	/* Core app palette */
+	--bg: #162f2f;
+	--bg-elevated: #1a3636;
+	--panel: #1b3934;
+	--panel-2: #1f423b;
+	--text: #f3eadc;
+	--text-soft: #dcc7a9;
+	--muted: #c3ae8f;
+	--border-soft: rgba(214, 189, 152, 0.16);
+	--border-strong: rgba(214, 189, 152, 0.28);
+
+	/* Brand accent */
+	--accent: #d6bd98;
+	--accent-600: #c8ac84;
+	--accent-700: #b29369;
+	--accent-ink: #1a3636;
+	--accent-ring: rgba(214, 189, 152, 0.28);
+
+	/* Destructive */
+	--danger: #ff6b6b;
+	--danger-600: #ff5353;
+	--danger-700: #ef4040;
+	--danger-ink: #fff5f5;
+	--danger-bg-soft: rgba(255, 107, 107, 0.12);
+
+	/* Landing-specific palette */
+	--landing-pine-900: #1a3636;
+	--landing-pine-800: #162f2f;
+	--landing-pine-700: #40534c;
+	--landing-moss-500: #677d6a;
+	--landing-sand-200: #d6bd98;
+	--landing-sand-100: #e4ceb0;
+	--landing-text-strong: #f3eadc;
+	--landing-text-soft: #dcc7a9;
 }
 
 html, body, #app {
 	background-color: var(--bg);
 	color: var(--text);
+	min-height: 100%;
 }
 
 html {
 	scroll-behavior: smooth;
+}
+
+body {
+	font-family: "Outfit", sans-serif;
+}
+
+.app-shell {
+	min-height: 100vh;
+	background: radial-gradient(circle at 8% -12%, rgba(214, 189, 152, 0.16), transparent 36%),
+		linear-gradient(160deg, var(--bg) 0%, var(--bg-elevated) 100%);
+	color: var(--text);
 }
 
 /* Reusable link-as-button */
@@ -25,26 +65,123 @@ html {
 	gap: 0.5rem;
 	padding: 0.45rem 0.8rem;
 	background: linear-gradient(180deg, var(--accent) 0%, var(--accent-600) 100%);
-	color: #0b0b0b;
+	color: var(--accent-ink);
 	border-radius: 9999px;
 	font-weight: 600;
 	text-decoration: none;
-	transition: transform .08s ease, box-shadow .12s ease, opacity .12s ease;
+	border: 1px solid var(--border-soft);
+	transition: transform .12s ease, box-shadow .18s ease, opacity .12s ease, filter .18s ease;
 }
 .link-button:hover {
-	transform: translateY(-1px);
+	transform: translateY(-2px);
 	box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-	opacity: 0.98;
+	filter: saturate(1.05);
 }
 
 .card-panel {
-	background-color: #0b1220; /* slightly different dark */
+	background-color: var(--panel-2);
+	border: 1px solid var(--border-soft);
 	border-radius: 12px;
 	padding: 1.25rem;
 }
 
 .rounded-input {
 	border-radius: 10px;
+}
+
+.text-muted {
+	color: var(--muted);
+}
+
+.text-error {
+	color: var(--danger);
+}
+
+.form-input {
+	width: 100%;
+	padding: 0.75rem 0.9rem;
+	border-radius: 10px;
+	border: 1px solid var(--border-soft);
+	background: rgba(214, 189, 152, 0.05);
+	color: var(--text);
+	transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.form-input::placeholder {
+	color: var(--muted);
+}
+
+.form-input:focus {
+	outline: none;
+	border-color: var(--accent);
+	box-shadow: 0 0 0 3px var(--accent-ring);
+	background: rgba(214, 189, 152, 0.08);
+}
+
+.button-primary {
+	padding: 0.6rem 1.1rem;
+	background: linear-gradient(180deg, var(--accent) 0%, var(--accent-600) 100%);
+	color: var(--accent-ink);
+	border: 1px solid var(--border-soft);
+	border-radius: 10px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.button-primary:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 22px rgba(103, 125, 106, 0.34);
+	filter: saturate(1.05);
+}
+
+.button-primary:disabled {
+	opacity: 0.56;
+	cursor: not-allowed;
+}
+
+.button-ghost {
+	padding: 0.55rem 1rem;
+	background: rgba(214, 189, 152, 0.08);
+	color: var(--text);
+	border: 1px solid var(--border-soft);
+	border-radius: 10px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.button-ghost:hover:not(:disabled) {
+	transform: translateY(-1px);
+	border-color: var(--border-strong);
+	background: rgba(214, 189, 152, 0.14);
+}
+
+.danger-button {
+	padding: 0.45rem 0.75rem;
+	background: linear-gradient(180deg, var(--danger-600), var(--danger-700));
+	color: var(--danger-ink);
+	border: 1px solid rgba(255, 107, 107, 0.35);
+	border-radius: 999px;
+	font-weight: 700;
+	letter-spacing: 0.01em;
+	transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.18s ease;
+}
+
+.danger-button:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 8px 20px rgba(255, 74, 74, 0.2);
+	filter: saturate(1.05);
+}
+
+.blockquote-accent {
+	border-left: 4px solid var(--accent);
+	padding-left: 1rem;
+	font-style: italic;
+	color: var(--text-soft);
+	font-size: 1.05rem;
+	line-height: 1.7;
+	background: transparent;
 }
 
 /* Navbar button styles */
@@ -55,33 +192,21 @@ html {
 	border-radius: 9999px;
 	background: transparent;
 	color: var(--text);
-	border: 1px solid rgba(255,255,255,0.04);
+	border: 1px solid var(--border-soft);
 	font-weight: 600;
 	text-decoration: none;
+	transition: transform 0.15s ease, background-color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
 .nav-button--active {
-	background: linear-gradient(180deg, rgba(255,122,24,0.95) 0%, rgba(255,107,0,0.95) 100%);
-	color: #071018;
+	background: linear-gradient(180deg, rgba(214, 189, 152, 0.96) 0%, rgba(200, 172, 132, 0.96) 100%);
+	color: var(--accent-ink);
 	box-shadow: 0 6px 18px rgba(0,0,0,0.45);
 }
 
 .nav-button:not(.nav-button--active):hover {
-    background: rgba(255,255,255,0.05);
-    cursor: pointer;
-}
-
-.danger-button {
-	background: linear-gradient(180deg,#ff6b6b,#ff4c4c);
-	color: #fff;
-	padding: 0.25rem 0.5rem;
-	border-radius: 8px;
-	font-weight: 600;
-}
-
-.danger-button:hover {
-  background: linear-gradient(180deg,#ff5a5a,#ff3b3b);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(255,74,74,0.12);
+	background: rgba(214, 189, 152, 0.12);
+	border-color: var(--border-strong);
+	cursor: pointer;
 }
 

@@ -141,12 +141,13 @@ async function handleSubmit() {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: linear-gradient(135deg, var(--bg) 0%, #1a2332 100%);
+	background: linear-gradient(135deg, var(--bg) 0%, var(--bg-elevated) 100%);
 	padding: 1rem;
 }
 
 .auth-box {
 	background: var(--panel);
+	border: 1px solid var(--border-soft);
 	border-radius: 16px;
 	padding: 2rem;
 	width: 100%;
@@ -177,7 +178,7 @@ async function handleSubmit() {
 	width: 100%;
 	padding: 0.75rem;
 	border-radius: 8px;
-	border: 2px solid rgba(255, 255, 255, 0.05);
+	border: 1px solid var(--border-soft);
 	background: rgba(255, 255, 255, 0.02);
 	color: var(--text);
 	font-size: 1rem;
@@ -188,20 +189,20 @@ async function handleSubmit() {
 .form-group input:focus {
 	outline: none;
 	border-color: var(--accent);
-	box-shadow: 0 0 0 3px rgba(255, 122, 24, 0.1);
+	box-shadow: 0 0 0 3px var(--accent-ring);
 }
 
 .error-text {
 	display: block;
-	color: #ff6b6b;
+	color: var(--danger);
 	font-size: 0.8rem;
 	margin-top: 0.25rem;
 }
 
 .error-message {
-	background: rgba(255, 107, 107, 0.1);
-	border-left: 4px solid #ff6b6b;
-	color: #ff8a8a;
+	background: var(--danger-bg-soft);
+	border-left: 4px solid var(--danger);
+	color: var(--danger-ink);
 	padding: 0.75rem;
 	border-radius: 6px;
 	margin-bottom: 1rem;
@@ -212,8 +213,8 @@ async function handleSubmit() {
 	width: 100%;
 	padding: 0.9rem;
 	background: linear-gradient(180deg, var(--accent) 0%, var(--accent-600) 100%);
-	color: #0b0b0b;
-	border: none;
+	color: var(--accent-ink);
+	border: 1px solid var(--border-soft);
 	border-radius: 8px;
 	font-weight: 700;
 	font-size: 1rem;
@@ -224,7 +225,7 @@ async function handleSubmit() {
 
 .auth-btn:hover:not(:disabled) {
 	transform: translateY(-2px);
-	box-shadow: 0 12px 24px rgba(255, 122, 24, 0.3);
+	box-shadow: 0 12px 24px rgba(103, 125, 106, 0.35);
 }
 
 .auth-btn:disabled {

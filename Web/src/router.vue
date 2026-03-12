@@ -60,7 +60,7 @@ onMounted(async () => {
 	align-items: center;
 	justify-content: center;
 	min-height: 100vh;
-	color: #e6eef8;
+	color: var(--text);
 	font-size: 1.2rem;
 }
 </style>

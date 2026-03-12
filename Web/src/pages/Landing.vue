@@ -149,17 +149,11 @@ onBeforeUnmount(() => {
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap");
 
 .landing-root {
-	--pine-900: #1a3636;
-	--pine-700: #40534c;
-	--moss-500: #677d6a;
-	--sand-200: #d6bd98;
-	--text-strong: #f3eadc;
-	--text-soft: #dcc7a9;
 	background:
 		radial-gradient(circle at 20% 15%, rgba(214, 189, 152, 0.14), transparent 40%),
 		radial-gradient(circle at 88% 18%, rgba(103, 125, 106, 0.32), transparent 46%),
-		linear-gradient(165deg, var(--pine-900) 0%, #162f2f 45%, var(--pine-700) 100%);
-	color: var(--text-strong);
+		linear-gradient(165deg, var(--landing-pine-900) 0%, var(--landing-pine-800) 45%, var(--landing-pine-700) 100%);
+	color: var(--landing-text-strong);
 	font-family: "Outfit", sans-serif;
 	min-height: 100vh;
 }
@@ -184,7 +178,7 @@ onBeforeUnmount(() => {
 	font-weight: 600;
 	letter-spacing: 0.12em;
 	text-transform: uppercase;
-	color: var(--sand-200);
+	color: var(--landing-sand-200);
 }
 
 .auth-cta {
@@ -192,7 +186,7 @@ onBeforeUnmount(() => {
 	padding: 0.55rem 1rem;
 	border-radius: 999px;
 	border: 1px solid rgba(214, 189, 152, 0.45);
-	color: var(--sand-200);
+	color: var(--landing-sand-200);
 	font-weight: 600;
 	font-size: 0.95rem;
 	transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
@@ -201,7 +195,7 @@ onBeforeUnmount(() => {
 .auth-cta:hover {
 	transform: translateY(-2px);
 	background: rgba(214, 189, 152, 0.92);
-	color: var(--pine-900);
+	color: var(--landing-pine-900);
 }
 
 .hero {
@@ -222,7 +216,7 @@ onBeforeUnmount(() => {
 	line-height: 0.95;
 	letter-spacing: 0.01em;
 	margin: 0;
-	color: var(--sand-200);
+	color: var(--landing-sand-200);
 }
 
 .title-caret {
@@ -230,7 +224,7 @@ onBeforeUnmount(() => {
 	width: 0.06em;
 	height: 0.9em;
 	margin-left: 0.08em;
-	background: var(--text-strong);
+	background: var(--landing-text-strong);
 	animation: caret-blink 1.1s steps(1) infinite;
 	vertical-align: -0.04em;
 }
@@ -240,13 +234,13 @@ onBeforeUnmount(() => {
 	line-height: 1.7;
 	margin: 1.5rem auto 0;
 	max-width: 620px;
-	color: var(--text-soft);
+	color: var(--landing-text-soft);
 }
 
 .ink-highlight {
 	position: relative;
 	display: inline-block;
-	color: #f9f2e6;
+	color: var(--landing-text-strong);
 	z-index: 1;
 	padding: 0 0.08em;
 }
@@ -285,25 +279,25 @@ onBeforeUnmount(() => {
 }
 
 .hero-button--primary {
-	background: var(--sand-200);
-	color: var(--pine-900);
+	background: var(--landing-sand-200);
+	color: var(--landing-pine-900);
 	box-shadow: 0 10px 26px rgba(8, 16, 16, 0.34);
 }
 
 .hero-button--primary:hover {
-	background: #e4ceb0;
+	background: var(--landing-sand-100);
 	box-shadow: 0 14px 28px rgba(8, 16, 16, 0.42);
 }
 
 .hero-button--ghost {
 	border-color: rgba(214, 189, 152, 0.5);
-	color: var(--sand-200);
+	color: var(--landing-sand-200);
 	background: rgba(64, 83, 76, 0.35);
 }
 
 .hero-button--ghost:hover {
 	background: rgba(214, 189, 152, 0.9);
-	color: var(--pine-900);
+	color: var(--landing-pine-900);
 }
 
 .scroll-indicator {
@@ -320,7 +314,7 @@ onBeforeUnmount(() => {
 }
 
 .scroll-indicator:hover {
-	color: #f6eddc;
+	color: var(--landing-text-strong);
 	border-color: rgba(246, 237, 220, 0.72);
 }
 
@@ -349,14 +343,14 @@ onBeforeUnmount(() => {
 	margin: 0;
 	font-family: "Playfair Display", serif;
 	font-size: clamp(1.8rem, 3vw, 2.4rem);
-	color: #f0e2cb;
+	color: var(--landing-text-strong);
 }
 
 .section-grid p {
 	margin: 0;
 	font-size: clamp(1rem, 1.8vw, 1.2rem);
 	line-height: 1.8;
-	color: #d8c5a7;
+	color: var(--landing-text-soft);
 }
 
 .card-grid {
@@ -391,20 +385,20 @@ onBeforeUnmount(() => {
 	font-weight: 700;
 	letter-spacing: 0.06em;
 	background: rgba(214, 189, 152, 0.18);
-	color: #f2debf;
+	color: var(--landing-text-strong);
 }
 
 .step-card h3 {
 	margin: 0.65rem 0 0.55rem;
 	font-size: 1.08rem;
-	color: #f3e4cb;
+	color: var(--landing-text-strong);
 }
 
 .step-card p {
 	margin: 0;
 	line-height: 1.65;
 	font-size: 0.95rem;
-	color: #d5c1a1;
+	color: var(--landing-text-soft);
 }
 
 .final-cta {
@@ -416,13 +410,13 @@ onBeforeUnmount(() => {
 	font-family: "Playfair Display", serif;
 	font-size: clamp(1.8rem, 4vw, 2.5rem);
 	margin: 0;
-	color: #f3e4cb;
+	color: var(--landing-text-strong);
 }
 
 .final-cta p {
 	max-width: 680px;
 	margin: 1rem auto 0;
-	color: #d8c4a4;
+	color: var(--landing-text-soft);
 	line-height: 1.7;
 }
 

@@ -1,5 +1,5 @@
 <template>
-	<div class="min-h-screen bg-gray-900 p-6 text-gray-100">
+	<div class="app-shell p-6">
 		<div class="max-w-2xl mx-auto">
 			<div class="text-center text-3xl font-bold mb-4">Articles</div>
 			<SearchBar
@@ -8,9 +8,9 @@
 
 			<NavbarButtons />
 
-			<div v-if="loading" class="text-center py-8 text-gray-400">Loading...</div>
-			<div v-if="error" class="text-center py-8 text-red-400">{{ error }}</div>
-			<div v-if="articles.length === 0 && !loading" class="text-center py-8 text-gray-400">No articles found.</div>
+			<div v-if="loading" class="text-center py-8 text-muted">Loading...</div>
+			<div v-if="error" class="text-center py-8 text-error">{{ error }}</div>
+			<div v-if="articles.length === 0 && !loading" class="text-center py-8 text-muted">No articles found.</div>
 			<div
 				v-if="articles.length > 0"
 				class="grid gap-6 mt-6">
@@ -63,4 +63,14 @@ onMounted(async () => {
 	}
 });
 </script>
+
+<style scoped>
+.text-muted {
+	color: var(--muted);
+}
+
+.text-error {
+	color: var(--danger);
+}
+</style>
 

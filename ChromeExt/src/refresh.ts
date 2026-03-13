@@ -7,7 +7,8 @@ type StoredAuth = {
 	expires_at?: number | string;
 };
 
-const SESSION_KEYS = ["auth_token", "refresh_token", "expires_at", "auth_email", "auth_password"] as const;
+const SESSION_KEYS = ["auth_token", "refresh_token", "expires_at"] as const;
+const LEGACY_CREDENTIAL_KEYS = ["auth_email", "auth_password"] as const;
 
 function parseExpiresAt(value: unknown): number | null {
 	if (typeof value === "number" && Number.isFinite(value)) return value;
@@ -19,7 +20,7 @@ function parseExpiresAt(value: unknown): number | null {
 }
 
 async function clearStoredAuth(): Promise<void> {
-	await chrome.storage.session.remove([...SESSION_KEYS]);
+	await chrome.storage.session.remove([...SESSION_KEYS, ...LEGACY_CREDENTIAL_KEYS]);
 }
 
 export async function getValidAuthToken(): Promise<string | undefined> {

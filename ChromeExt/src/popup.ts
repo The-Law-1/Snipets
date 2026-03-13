@@ -24,14 +24,13 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SNIPPETS_WEB_APP_URL = process.env.SNIPPETS_WEB_APP_URL;
 
-const SESSION_KEYS = ["auth_token", "refresh_token", "expires_at", "auth_email", "auth_password"] as const;
+const SESSION_KEYS = ["auth_token", "refresh_token", "expires_at"] as const;
+const LEGACY_CREDENTIAL_KEYS = ["auth_email", "auth_password"] as const;
 
 type StoredAuth = {
 	auth_token?: string;
 	refresh_token?: string;
 	expires_at?: number;
-	auth_email?: string;
-	auth_password?: string;
 };
 
 function setStatus(message: string, isError = false): void {
@@ -81,20 +80,15 @@ function showReadyUi(email?: string): void {
 }
 
 async function clearSessionCredentials(): Promise<void> {
-	await chrome.storage.session.remove([...SESSION_KEYS]);
+	await chrome.storage.session.remove([...SESSION_KEYS, ...LEGACY_CREDENTIAL_KEYS]);
 }
 
 async function persistSessionAuth(payload: {
-	email: string;
-	password: string;
 	accessToken?: string;
 	refreshToken?: string;
 	expiresAt?: number;
 }): Promise<void> {
-	const data: Record<string, string | number> = {
-		auth_email: payload.email,
-		auth_password: payload.password,
-	};
+	const data: Record<string, string | number> = {};
 
 	if (payload.accessToken) {
 		data.auth_token = payload.accessToken;
@@ -139,8 +133,6 @@ async function signIn(email: string, password: string): Promise<void> {
 
 	const data = (await response.json()) as Record<string, unknown>;
 	await persistSessionAuth({
-		email,
-		password,
 		accessToken: data.access_token as string | undefined,
 		refreshToken: data.refresh_token as string | undefined,
 		expiresAt: getExpiresAtFromResponse(data),
@@ -167,8 +159,6 @@ async function signUp(email: string, password: string): Promise<void> {
 
 	const data = (await response.json()) as Record<string, unknown>;
 	await persistSessionAuth({
-		email,
-		password,
 		accessToken: data.access_token as string | undefined,
 		refreshToken: data.refresh_token as string | undefined,
 		expiresAt: getExpiresAtFromResponse(data),
@@ -256,19 +246,12 @@ logoutButton.addEventListener("click", async () => {
 
 async function init(): Promise<void> {
 	setLoading(false);
+	await chrome.storage.session.remove([...LEGACY_CREDENTIAL_KEYS]);
 	const stored = (await chrome.storage.session.get([...SESSION_KEYS])) as StoredAuth;
 	const hasStoredToken = Boolean(stored.auth_token);
-	const hasStoredCredentials = Boolean(stored.auth_email && stored.auth_password);
 
-	if (stored.auth_email) {
-		emailInput.value = stored.auth_email;
-	}
-	if (stored.auth_password) {
-		passwordInput.value = stored.auth_password;
-	}
-
-	if (hasStoredToken || hasStoredCredentials) {
-		showReadyUi(stored.auth_email);
+	if (hasStoredToken) {
+		showReadyUi();
 		setStatus("");
 		return;
 	}

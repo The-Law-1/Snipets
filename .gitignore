@@ -6,3 +6,8 @@ skills/
 supabase/.branches/
 supabase/.temp
 supabase/.env
+
+*.zip
+*.pem
+*.crx
+ChromeStore/*

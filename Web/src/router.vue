@@ -6,6 +6,7 @@ import Articles from "./pages/Articles.vue";
 import Auth from "./pages/Auth.vue";
 import Feed from "./pages/Feed.vue";
 import Friends from "./pages/Friends.vue";
+import Privacy from "./pages/Privacy.vue";
 import { useAuthStore } from "./store/auth";
 
 const authStore = useAuthStore();
@@ -18,6 +19,7 @@ const routes: any = {
 	"/feed": Feed,
 	"/friends": Friends,
 	"/auth": Auth,
+	"/privacy": Privacy,
 };
 
 const currentPath = ref(window.location.hash);

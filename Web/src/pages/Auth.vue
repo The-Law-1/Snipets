@@ -63,6 +63,10 @@
 					{{ isLogin ? "Sign Up" : "Log In" }}
 				</button>
 			</div>
+
+			<div class="privacy-link-wrap">
+				<a href="#/privacy" class="privacy-link">Privacy Policy</a>
+			</div>
 		</div>
 	</div>
 </template>
@@ -252,6 +256,21 @@ async function handleSubmit() {
 
 .toggle-btn:hover {
 	color: var(--accent-600);
+	text-decoration: underline;
+}
+
+.privacy-link-wrap {
+	text-align: center;
+	margin-top: 0.9rem;
+}
+
+.privacy-link {
+	color: var(--text-soft);
+	font-size: 0.9rem;
+	text-decoration: none;
+}
+
+.privacy-link:hover {
 	text-decoration: underline;
 }
 </style>

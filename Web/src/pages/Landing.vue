@@ -2,7 +2,10 @@
 	<div class="landing-root">
 		<header class="top-nav">
 			<a href="#/" class="brand">Snipets</a>
-			<a :href="authCtaHref" class="auth-cta">{{ authCtaLabel }}</a>
+			<div class="nav-actions">
+				<a href="#/privacy" class="auth-cta">Privacy</a>
+				<a :href="authCtaHref" class="auth-cta">{{ authCtaLabel }}</a>
+			</div>
 		</header>
 
 		<main>
@@ -151,6 +154,12 @@ onBeforeUnmount(() => {
 	z-index: 25;
 	background: linear-gradient(180deg, rgba(26, 54, 54, 0.92) 0%, rgba(26, 54, 54, 0.35) 74%, transparent 100%);
 	backdrop-filter: blur(3px);
+}
+
+.nav-actions {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
 }
 
 .brand {

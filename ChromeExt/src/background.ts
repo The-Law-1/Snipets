@@ -68,10 +68,6 @@ async function sendSelectedText(text: string, pageUrl?: string, pageTitle?: stri
 	});
 }
 
-async function openSignInPopup() {
-	await notify("Unauthorized", "Invalid or expired token, click this pop-up to sign in or create your account.", MessageType.LOGIN_REQUIRED);
-}
-
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 	if (info.menuItemId !== MENU_ID) return;
@@ -89,32 +85,85 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 		const res = await sendSelectedText(selected, pageUrl, pageTitle);
 		if (!res.ok) {
 			if (res.status === 401) {
-				openSignInPopup();
+				await notify(
+					"Unauthorized",
+					"Invalid or expired token, click this pop-up to sign in or create your account.",
+					MessageType.LOGIN_REQUIRED,
+					tab?.id
+				);
 				return;
 			}
-			await notify("API Error:", `${res.status} ${res.statusText}`);
+			await notify("API Error:", `${res.status} ${res.statusText}`, MessageType.SHOW_ALERT, tab?.id);
 		} else {
-			await notify("Saved ✓", `Snippet saved to Snipets!\nClick this notification to view.`, MessageType.OPEN_WEB_APP);
+			await notify(
+				"Saved ✓",
+				`Snippet saved to Snipets!\nClick this notification to view.`,
+				MessageType.OPEN_WEB_APP,
+				tab?.id
+			);
 		}
 	} catch (err: any) {
 		// if error a certain type APIKeyError e.g. token expired, then open popup to let user sign in again
 		if (err instanceof APITokenError) {
-			openSignInPopup();
+			await notify(
+				"Unauthorized",
+				"Invalid or expired token, click this pop-up to sign in or create your account.",
+				MessageType.LOGIN_REQUIRED,
+				tab?.id
+			);
 			return;
 		}
-		await notify("Failed to save", err?.message || String(err));
+		await notify("Failed to save", err?.message || String(err), MessageType.SHOW_ALERT, tab?.id);
 	}
 });
 
-// Simple user feedback via notification
-async function notify(title: string, message?: string, type: MessageType = MessageType.SHOW_ALERT) {
+async function showFallbackRefreshNotification(message: string): Promise<void> {
+	const iconUrl = chrome.runtime.getURL("assets/icon128.png");
+	await chrome.notifications.create({
+		type: "basic",
+		iconUrl,
+		title: "Snipets",
+		message,
+	});
+}
 
-	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-		if (tabs[0]?.id) {
-			chrome.tabs.sendMessage(tabs[0].id, {
+async function getCurrentActiveTabId(): Promise<number | undefined> {
+	const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+	return tabs[0]?.id;
+}
+
+// Simple user feedback via notification
+async function notify(title: string, message?: string, type: MessageType = MessageType.SHOW_ALERT, tabId?: number) {
+	const messageText = `${title}\n${message || ""}`;
+	const resolvedTabId = tabId ?? (await getCurrentActiveTabId());
+
+	if (!resolvedTabId) {
+		console.log("No active tab found to send message to.");
+		await showFallbackRefreshNotification(`Page disconnected\nSnipets is not yet active on this tab, please refresh and try again.`);
+		return;
+	}
+
+	await new Promise<void>((resolve) => {
+		chrome.tabs.sendMessage(
+			resolvedTabId,
+			{
 				type: type,
-				message: `${title}\n${message || ""}`,
-			});
-		}
+				message: messageText,
+			},
+			() => {
+				const lastErrorMessage = chrome.runtime.lastError?.message || "";
+				console.log("Message send result:", { lastErrorMessage });
+
+				if (
+					lastErrorMessage &&
+					lastErrorMessage.includes("Receiving end does not exist.")
+				) {
+					void showFallbackRefreshNotification(
+						`Extension has not yet loaded on this page, please refresh then try again.`
+					);
+				}
+				resolve();
+			}
+		);
 	});
 }

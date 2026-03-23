@@ -82,6 +82,8 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 	const pageTitle = tab?.title || "Untitled";
 
 	try {
+    notify("Got it!", "Sending snippet to server...", MessageType.LOADING, tab?.id);
+
 		const res = await sendSelectedText(selected, pageUrl, pageTitle);
 		if (!res.ok) {
 			if (res.status === 401) {

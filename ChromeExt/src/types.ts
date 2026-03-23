@@ -5,6 +5,7 @@ export class APITokenError extends Error {
 }
 
 export enum MessageType {
+    LOADING = "LOADING",
     SHOW_ALERT = "SHOW_ALERT",
     LOGIN_REQUIRED = "LOGIN_REQUIRED",
     OPEN_LOGIN_PAGE = "OPEN_LOGIN_PAGE",

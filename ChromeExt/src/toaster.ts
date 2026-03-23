@@ -1,11 +1,44 @@
 const TOAST_CONTAINER_ID = "snipets-toast-container";
-const TOAST_DURATION_MS = 5000;
+const TOAST_STYLE_ID = "snipets-toast-styles";
+const TOAST_DURATION_MS = 10000;
 const TOAST_ANIMATION_MS = 180;
 
 function normalizeToastMessage(message: string) {
 	return message
 		.replace(/<br\s*\/?>/gi, "\n")
 		.replace(/\\n/g, "\n");
+}
+
+function ensureToastStyles() {
+	if (document.getElementById(TOAST_STYLE_ID)) {
+		return;
+	}
+
+	const style = document.createElement("style");
+	style.id = TOAST_STYLE_ID;
+	style.textContent = `
+		.snipets-toast-loader {
+			width: 18px;
+			height: 18px;
+			border: 3px solid #FFF;
+			border-bottom-color: transparent;
+			border-radius: 50%;
+			display: inline-block;
+			box-sizing: border-box;
+			animation: snipets-rotation 1s linear infinite;
+			flex-shrink: 0;
+		}
+
+		@keyframes snipets-rotation {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+	`;
+	document.head.appendChild(style);
 }
 
 const TOAST_THEME = {
@@ -41,9 +74,12 @@ function getToastContainer() {
 }
 
 export function showToast(message: string, onClick?: () => void) {
+	ensureToastStyles();
+	const normalizedMessage = normalizeToastMessage(message);
+	const isLoadingToast = normalizedMessage.toLowerCase().includes("sending snippet to server...");
+
 	const container = getToastContainer();
 	const toast = document.createElement("div");
-	toast.textContent = normalizeToastMessage(message);
 	Object.assign(toast.style, {
 		position: "relative",
 		overflow: "hidden",
@@ -61,8 +97,32 @@ export function showToast(message: string, onClick?: () => void) {
 		transition: `opacity ${TOAST_ANIMATION_MS}ms ease, transform ${TOAST_ANIMATION_MS}ms ease`,
 		pointerEvents: "auto",
 		textAlign: "center",
-		whiteSpace: "pre-line",
+		whiteSpace: "normal",
 	});
+
+	if (isLoadingToast) {
+		const contentWrapper = document.createElement("div");
+		Object.assign(contentWrapper.style, {
+			display: "inline-flex",
+			alignItems: "center",
+			justifyContent: "center",
+			gap: "8px",
+		});
+
+		const spinner = document.createElement("span");
+		spinner.className = "snipets-toast-loader";
+
+		const messageText = document.createElement("span");
+		messageText.textContent = normalizedMessage;
+		messageText.style.whiteSpace = "pre-line";
+
+		contentWrapper.appendChild(messageText);
+		contentWrapper.appendChild(spinner);
+		toast.appendChild(contentWrapper);
+	} else {
+		toast.textContent = normalizedMessage;
+		toast.style.whiteSpace = "pre-line";
+	}
 
     if (onClick !== undefined) {
         toast.style.cursor = "pointer";
@@ -122,4 +182,14 @@ export function showToast(message: string, onClick?: () => void) {
 		closeToast(toast);
 		clearTimeout(timeoutId);
 	});
+}
+
+export function closeLoadingToasts() {
+  const container = getToastContainer();
+  const loadingToasts = container.querySelectorAll("div:has(.snipets-toast-loader)");
+  loadingToasts.forEach((toast:Element) => {
+    (toast as HTMLElement).style.opacity = "0";
+    (toast as HTMLElement).style.transform = "translateY(-6px)";
+    setTimeout(() => toast.remove(), TOAST_ANIMATION_MS);
+  });
 }

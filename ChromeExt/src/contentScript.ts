@@ -1,4 +1,4 @@
-import { showToast } from "./toaster";
+import { closeLoadingToasts, showToast } from "./toaster";
 import { MessageType } from "./types";
 
 
@@ -13,7 +13,9 @@ function openWebApp() {
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 	let handled = false;
 
-	if (msg.type === MessageType.OPEN_WEB_APP) {
+  closeLoadingToasts();
+
+  if (msg.type === MessageType.OPEN_WEB_APP) {
 		showToast(msg.message, openWebApp);
 		handled = true;
 	}
@@ -27,6 +29,11 @@ chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
 		showToast(msg.message);
 		handled = true;
 	}
+
+  if (msg.type === MessageType.LOADING) {
+    showToast(msg.message);
+    handled = true;
+  }
 
 	if (handled) {
 		sendResponse({ ok: true });

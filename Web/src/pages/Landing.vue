@@ -19,7 +19,7 @@
 					</p>
 					<div class="hero-actions">
 						<a
-							href="https://chromewebstore.google.com/detail/your-extension-id-placeholder"
+							href="https://chromewebstore.google.com/detail/snipets/jofbabbfafeeknpabophbomfnpljpfop"
 							target="_blank"
 							rel="noopener noreferrer"
 							class="hero-button hero-button--primary"

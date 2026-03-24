@@ -42,36 +42,49 @@
 				</div>
 			</section>
 
-			<section class="content-section" data-reveal>
-				<div class="card-grid">
-					<article class="step-card">
-						<span class="step-number">01</span>
-						<h3>Install the extension</h3>
-						<p>
-							Add the extension to chrome, select some text, right-click and save to your snippets library.
+			<section class="content-section workflow-section" data-reveal>
+				<div class="workflow-layout">
+					<div class="card-grid card-grid--two-by-two">
+						<article class="step-card">
+							<span class="step-number">01</span>
+							<h3>Install the extension</h3>
+							<p>
+								Add the extension to chrome, select some text, right-click and save to your snippets library.
+							</p>
+						</article>
+						<article class="step-card">
+							<span class="step-number">02</span>
+							<h3>Create your account</h3>
+							<p>
+								Create an account with a simple email and password to privately store and sync your snippets.
+							</p>
+						</article>
+						<article class="step-card">
+							<span class="step-number">03</span>
+							<h3>Highlight and save snippets</h3>
+							<p>
+								Highlight snippets you like, group them, search them, review them.
+							</p>
+						</article>
+						<article class="step-card">
+							<span class="step-number">04</span>
+							<h3>Add friends!</h3>
+							<p>
+								Follow your friends, discover their highlights, and share effortlessly.
+							</p>
+						</article>
+					</div>
+
+					<aside class="demo-panel" aria-label="Snipets demo video">
+						<p class="demo-kicker">Have a look</p>
+						<video class="demo-video" autoplay muted loop playsinline preload="metadata">
+							<source src="/snipets_demo.mp4" type="video/mp4" />
+							Your browser does not support the video tag.
+						</video>
+						<p class="demo-caption">
+							Highlight and save in seconds. Access your snippets later, whenever you need.
 						</p>
-					</article>
-					<article class="step-card">
-						<span class="step-number">02</span>
-						<h3>Create your account</h3>
-						<p>
-							Create an account with a simple email and password to privately store and sync your snippets.
-						</p>
-					</article>
-					<article class="step-card">
-						<span class="step-number">03</span>
-						<h3>Highlight and save snippets</h3>
-						<p>
-							Highlight snippets you like, group them, search them, review them.
-						</p>
-					</article>
-					<article class="step-card">
-						<span class="step-number">04</span>
-						<h3>Add friends!</h3>
-						<p>
-							Follow your friends, discover their highlights, and share effortlessly.
-						</p>
-					</article>
+					</aside>
 				</div>
 			</section>
 
@@ -309,7 +322,7 @@ onBeforeUnmount(() => {
 }
 
 .content-section {
-	max-width: 1100px;
+	max-width: 1200px;
 	margin: 0 auto;
 	padding: clamp(3rem, 5vw, 4.8rem) clamp(1rem, 3.2vw, 2.2rem);
 	opacity: 0;
@@ -347,6 +360,58 @@ onBeforeUnmount(() => {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	gap: 1rem;
+}
+
+.card-grid--two-by-two {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.workflow-section {
+	padding-top: 0;
+}
+
+.workflow-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(360px, 1.05fr);
+	align-items: stretch;
+	gap: 1.2rem;
+}
+
+.demo-panel {
+	border: 1px solid rgba(214, 189, 152, 0.24);
+	border-radius: 18px;
+	padding: 0.9rem 0.9rem 0.95rem;
+	background:
+		linear-gradient(160deg, rgba(26, 54, 54, 0.58), rgba(64, 83, 76, 0.38)),
+		repeating-linear-gradient(135deg, transparent 0 11px, rgba(214, 189, 152, 0.035) 11px 12px);
+	box-shadow: 0 20px 34px rgba(10, 19, 19, 0.3);
+}
+
+.demo-kicker {
+	margin: 0 0 0.6rem;
+	font-size: 0.78rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	font-weight: 700;
+	color: rgba(246, 237, 220, 0.9);
+}
+
+.demo-video {
+	width: 100%;
+	aspect-ratio: 4 / 3;
+	min-height: clamp(350px, 38vw, 460px);
+	display: block;
+	border-radius: 12px;
+	border: 1px solid rgba(214, 189, 152, 0.24);
+	background: rgba(11, 24, 24, 0.65);
+	object-fit: cover;
+}
+
+.demo-caption {
+	margin: 0.7rem 0 0;
+	line-height: 1.55;
+	font-size: 0.92rem;
+	color: var(--landing-text-soft);
 }
 
 .step-card {
@@ -423,6 +488,14 @@ onBeforeUnmount(() => {
 
 @media (max-width: 760px) {
 	.section-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.card-grid--two-by-two {
+		grid-template-columns: 1fr;
+	}
+
+	.workflow-layout {
 		grid-template-columns: 1fr;
 	}
 
